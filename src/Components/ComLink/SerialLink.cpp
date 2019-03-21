@@ -66,5 +66,5 @@ uint8_t SerialLink::read()
 	while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
 		;
 
-	return (USART1->DR & 0xFF);
+	return USART1->DR;
 }

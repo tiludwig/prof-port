@@ -25,11 +25,11 @@ struct command_t
 enum ReceiverState
 {
 	WaitingForStart,
-	ReadingId,
-	ReadingSizeMSB,
-	ReadingSizeLSB,
-	ReadingData,
-	ReadingChecksum
+	ReceivingId,
+	ReceivingSizeMSB,
+	ReceivingSizeLSB,
+	ReceivingPayload,
+	ReceivingChecksum,
 };
 
 struct routing_entry_t
@@ -54,8 +54,10 @@ private:
 	int8_t runningSum;
 
 	ReceiverState state;
+	bool needsDestuffing;
 public:
 	uint32_t invalidCommandsCounter;
+
 public:
 	CommandReceiver();
 

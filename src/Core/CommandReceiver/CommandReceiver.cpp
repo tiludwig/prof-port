@@ -17,6 +17,7 @@ CommandReceiver::CommandReceiver()
 	invalidCommandsCounter = 0;
 
 	state = WaitingForStart;
+	needsDestuffing = false;
 }
 
 void CommandReceiver::registerComponent(uint8_t id, ICommandable* target)
@@ -41,14 +42,25 @@ struct routing_entry_t* CommandReceiver::getRoutingEntryForId(uint8_t id)
 
 bool CommandReceiver::process(char data)
 {
-	runningSum += data;
-
-	// check for start symbol
-	if (data == startMarker)
+	// check if data is start symbol
+	if (data == '#')
 	{
-		state = ReadingId;
-		runningSum = 0;
+		// change state from waiting to receiving
+		state = ReceivingId;
 		return false;
+	}
+
+	// check if byte needs to be destuffed
+	if (data == '?')
+	{
+		needsDestuffing = true;
+		return false;
+	}
+
+	if (needsDestuffing)
+	{
+		needsDestuffing = false;
+		data = data ^ 0x20;
 	}
 
 	bool result = false;
@@ -57,7 +69,7 @@ bool CommandReceiver::process(char data)
 	{
 	case WaitingForStart:
 		break;
-	case ReadingId:
+	case ReceivingId:
 	{
 		receivedId = data;
 		auto routingEntry = getRoutingEntryForId(receivedId);
@@ -69,32 +81,30 @@ bool CommandReceiver::process(char data)
 		{
 			cmdBuffer = routingEntry->buffer;
 			cmdBuffer->clear();
-			state = ReadingSizeLSB;
+			state = ReceivingSizeMSB;
 		}
 		break;
 	}
-	case ReadingSizeLSB:
+	case ReceivingSizeMSB:
 		bytesToReceive = ((uint16_t) data) << 8;
-		state = ReadingSizeMSB;
+		state = ReceivingSizeLSB;
 		break;
 
-	case ReadingSizeMSB:
+	case ReceivingSizeLSB:
 		bytesToReceive |= data;
-		if(bytesToReceive == 0)
-			state = ReadingChecksum;
+		if (bytesToReceive == 0)
+			state = ReceivingChecksum;
 		else
-			state = ReadingData;
+			state = ReceivingPayload;
 		break;
-
-	case ReadingData:
+	case ReceivingPayload:
 		cmdBuffer->push_back(data);
 		bytesToReceive--;
 		if (bytesToReceive == 0)
-			state = ReadingChecksum;
+			state = ReceivingChecksum;
 		break;
-
-	case ReadingChecksum:
-		if (runningSum != 0)
+	case ReceivingChecksum:
+		if ( (runningSum + (int8_t)data) != 0)
 		{
 			invalidCommandsCounter++;
 			result = false;
@@ -107,9 +117,81 @@ bool CommandReceiver::process(char data)
 			result = true;
 		}
 		state = WaitingForStart;
-
 		break;
 	}
 
+	runningSum += data;
 	return result;
+
+	/*runningSum += data;
+
+	 // check for start symbol
+	 if (data == startMarker)
+	 {
+	 state = ReadingId;
+	 runningSum = 0;
+	 return false;
+	 }
+
+	 bool result = false;
+
+	 switch (state)
+	 {
+	 case WaitingForStart:
+	 break;
+	 case ReadingId:
+	 {
+	 receivedId = data;
+	 auto routingEntry = getRoutingEntryForId(receivedId);
+	 if (routingEntry == nullptr)
+	 {
+	 state = WaitingForStart;
+	 }
+	 else
+	 {
+	 cmdBuffer = routingEntry->buffer;
+	 cmdBuffer->clear();
+	 state = ReadingSizeLSB;
+	 }
+	 break;
+	 }
+	 case ReadingSizeLSB:
+	 bytesToReceive = ((uint16_t) data) << 8;
+	 state = ReadingSizeMSB;
+	 break;
+
+	 case ReadingSizeMSB:
+	 bytesToReceive |= data;
+	 if(bytesToReceive == 0)
+	 state = ReadingChecksum;
+	 else
+	 state = ReadingData;
+	 break;
+
+	 case ReadingData:
+	 cmdBuffer->push_back(data);
+	 bytesToReceive--;
+	 if (bytesToReceive == 0)
+	 state = ReadingChecksum;
+	 break;
+
+	 case ReadingChecksum:
+	 if (runningSum != 0)
+	 {
+	 invalidCommandsCounter++;
+	 result = false;
+	 }
+	 else
+	 {
+	 auto entry = getRoutingEntryForId(receivedId);
+	 auto target = entry->target;
+	 target->accept();
+	 result = true;
+	 }
+	 state = WaitingForStart;
+
+	 break;
+	 }
+
+	 return result;*/
 }
