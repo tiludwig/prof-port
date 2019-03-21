@@ -48,7 +48,21 @@ public:
 		return (index >= size);
 	}
 
-	void push_back(const T& data)
+	void push_back(T& data)
+	{
+		if (p_data == nullptr)
+			return;
+
+		if (isFull())
+		{
+			overflowCount++;
+			return;
+		}
+
+		p_data[index++] = data;
+	}
+
+	void push_back(T&& data)
 	{
 		if (p_data == nullptr)
 			return;

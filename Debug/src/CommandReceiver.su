@@ -1,4 +1,0 @@
-CommandReceiver.cpp:10:1:CommandReceiver::CommandReceiver()	4	static
-CommandReceiver.cpp:22:6:void CommandReceiver::registerComponent(uint8_t, ICommandable*)	24	static
-CommandReceiver.cpp:31:25:routing_entry_t* CommandReceiver::getRoutingEntryForId(uint8_t)	0	static
-CommandReceiver.cpp:42:6:void CommandReceiver::process(char)	8	static
