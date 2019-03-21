@@ -1,0 +1,5 @@
+SerialLink.cpp:14:1:SerialLink::~SerialLink()	0	static
+SerialLink.cpp:14:1:virtual SerialLink::~SerialLink()	8	static
+SerialLink.cpp:19:6:virtual bool SerialLink::initialize()	40	static
+SerialLink.cpp:53:6:virtual void SerialLink::write(uint8_t*, uint32_t)	16	static
+SerialLink.cpp:64:9:virtual uint8_t SerialLink::read()	8	static

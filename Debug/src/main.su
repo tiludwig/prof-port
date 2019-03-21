@@ -1,0 +1,9 @@
+main.cpp:41:15:virtual void TestTarget::initialize()	0	static
+main.cpp:45:15:virtual void TestTarget::startProcessCycle()	0	static
+main.cpp:48:15:virtual void TestTarget::waitForCycleToEnd()	0	static
+main.cpp:52:15:virtual void TestTarget::accept()	4	static
+main.cpp:38:7:TestTarget::~TestTarget()	0	static
+Commandable.h:38:26:buffer_t<char>* Commandable<N>::getCommandBuffer() [with long unsigned int N = 128ul]	0	static
+Commandable.h:43:19:uint32_t Commandable<N>::getCommandBufferSize() [with long unsigned int N = 128ul]	0	static
+main.cpp:38:7:virtual TestTarget::~TestTarget()	8	static
+main.cpp:58:5:int main()	256	static

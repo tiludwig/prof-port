@@ -1,0 +1,5 @@
+DefaultProtocol.cpp:10:1:DefaultProtocol::~DefaultProtocol()	0	static
+DefaultProtocol.cpp:15:6:virtual bool DefaultProtocol::isPacketComplete()	0	static
+DefaultProtocol.cpp:45:6:virtual void DefaultProtocol::resetReceiver()	0	static
+DefaultProtocol.cpp:10:1:virtual DefaultProtocol::~DefaultProtocol()	8	static
+DefaultProtocol.cpp:20:6:virtual void DefaultProtocol::processByte(char)	8	static
