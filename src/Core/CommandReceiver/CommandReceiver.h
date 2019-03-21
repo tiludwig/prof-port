@@ -54,6 +54,7 @@ private:
 	int8_t runningSum;
 
 	ReceiverState state;
+public:
 	uint32_t invalidCommandsCounter;
 public:
 	CommandReceiver();
@@ -62,7 +63,7 @@ public:
 
 	routing_entry_t* getRoutingEntryForId(uint8_t id);
 
-	void process(char data);
+	bool process(char data);
 };
 
 #endif /* COMMANDRECEIVER_H_ */

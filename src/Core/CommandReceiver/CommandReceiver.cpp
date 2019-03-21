@@ -39,17 +39,23 @@ struct routing_entry_t* CommandReceiver::getRoutingEntryForId(uint8_t id)
 	return nullptr;
 }
 
-void CommandReceiver::process(char data)
+bool CommandReceiver::process(char data)
 {
 	runningSum += data;
+
+	// check for start symbol
+	if (data == startMarker)
+	{
+		state = ReadingId;
+		runningSum = 0;
+		return false;
+	}
+
+	bool result = false;
+
 	switch (state)
 	{
 	case WaitingForStart:
-		if (data == startMarker)
-		{
-			state = ReadingId;
-			runningSum = 0;
-		}
 		break;
 	case ReadingId:
 	{
@@ -62,36 +68,48 @@ void CommandReceiver::process(char data)
 		else
 		{
 			cmdBuffer = routingEntry->buffer;
+			cmdBuffer->clear();
 			state = ReadingSizeLSB;
 		}
-
 		break;
 	}
 	case ReadingSizeLSB:
 		bytesToReceive = ((uint16_t) data) << 8;
 		state = ReadingSizeMSB;
 		break;
+
 	case ReadingSizeMSB:
 		bytesToReceive |= data;
-		state = ReadingData;
+		if(bytesToReceive == 0)
+			state = ReadingChecksum;
+		else
+			state = ReadingData;
 		break;
+
 	case ReadingData:
 		cmdBuffer->push_back(data);
 		bytesToReceive--;
 		if (bytesToReceive == 0)
 			state = ReadingChecksum;
 		break;
+
 	case ReadingChecksum:
 		if (runningSum != 0)
 		{
 			invalidCommandsCounter++;
+			result = false;
 		}
 		else
 		{
 			auto entry = getRoutingEntryForId(receivedId);
 			auto target = entry->target;
 			target->accept();
+			result = true;
 		}
+		state = WaitingForStart;
+
 		break;
 	}
+
+	return result;
 }

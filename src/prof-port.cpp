@@ -56,6 +56,18 @@ public:
 	}
 };
 
+void send_msg(const char* msg)
+{
+	while (*msg != '\0')
+	{
+		USART_SendData(USART1, *msg++);
+
+		while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			;
+
+	}
+}
+
 int main()
 {
 	SerialLink link;
@@ -66,30 +78,14 @@ int main()
 	CommandReceiver receiver;
 	receiver.registerComponent(1, &target);
 
-	char data[7];
-	buffer_t<char> buf(data, 7);
-	buf.push_back('#');
-	buf.push_back(1);
-	buf.push_back(2);
-	buf.push_back(0);
-	buf.push_back('t');
-	buf.push_back('l');
-	buf.push_back(29);
-
-	streamreader reader(buf);
-
-	auto marker = reader.read<char>();
-	auto id = reader.read<char>();
-	auto size = reader.read<uint16_t>();
-	auto first = reader.read<char>();
-	auto second = reader.read<char>();
-	auto checksum = reader.read<uint8_t>();
-
 	while (true)
 	{
-		//auto data = link.read();
-		for (int i = 0; i < 7; i++)
-			receiver.process(data[i]);
+		auto data = link.read();
+		//USART_SendData(USART1, data);
+		if(receiver.process(data))
+		{
+			send_msg("Received a message.\n");
+		}
 	}
 
 	return 0;
