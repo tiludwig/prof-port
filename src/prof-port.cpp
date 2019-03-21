@@ -34,8 +34,9 @@
 #include <Components/ComLink/SerialLink.h>
 #include <Components/Target/Target.h>
 #include <Core/Buffer/basic_buffer.h>
+#include <Core/Stream/streamreader.h>
 
-class TestTarget : public Target
+class TestTarget: public Target
 {
 public:
 	virtual void initialize()
@@ -65,13 +66,30 @@ int main()
 	CommandReceiver receiver;
 	receiver.registerComponent(1, &target);
 
-	char data[] = {'#', 1, 0, 2, 't', 'l', 29};
+	char data[7];
+	buffer_t<char> buf(data, 7);
+	buf.push_back('#');
+	buf.push_back(1);
+	buf.push_back(2);
+	buf.push_back(0);
+	buf.push_back('t');
+	buf.push_back('l');
+	buf.push_back(29);
+
+	streamreader reader(buf);
+
+	auto marker = reader.read<char>();
+	auto id = reader.read<char>();
+	auto size = reader.read<uint16_t>();
+	auto first = reader.read<char>();
+	auto second = reader.read<char>();
+	auto checksum = reader.read<uint8_t>();
 
 	while (true)
 	{
 		//auto data = link.read();
-		for(int i = 0; i < 7; i++)
-		receiver.process(data[i]);
+		for (int i = 0; i < 7; i++)
+			receiver.process(data[i]);
 	}
 
 	return 0;

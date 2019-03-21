@@ -8,6 +8,8 @@
 #ifndef BUFFER_H_
 #define BUFFER_H_
 
+#include <stdint.h>
+
 template<class T>
 class buffer_t
 {
