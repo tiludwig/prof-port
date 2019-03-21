@@ -39,11 +39,6 @@ public:
 	{
 		return &buffer;
 	}
-
-	virtual uint32_t getCommandBufferSize()
-	{
-		return buffer.getCapacity();
-	}
 };
 
 #endif /* COMMANDABLE_H_ */

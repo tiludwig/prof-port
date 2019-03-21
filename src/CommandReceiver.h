@@ -41,7 +41,7 @@ struct routing_entry_t
 class CommandReceiver
 {
 private:
-	const char startMarker = '#';
+	static constexpr char startMarker = '#';
 
 	buffer_t<char>* cmdBuffer;
 
