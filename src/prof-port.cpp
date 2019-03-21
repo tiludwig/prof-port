@@ -30,10 +30,10 @@
 /* Includes */
 #include "stm32f10x.h"
 
-#include <comlink/SerialLink.h>
-#include <CommandReceiver.h>
-#include <basic_buffer.h>
-#include <Target.h>
+#include <Core/CommandReceiver/CommandReceiver.h>
+#include <Components/ComLink/SerialLink.h>
+#include <Components/Target/Target.h>
+#include <Core/Buffer/basic_buffer.h>
 
 class TestTarget : public Target
 {

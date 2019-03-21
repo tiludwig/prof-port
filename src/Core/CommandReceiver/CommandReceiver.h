@@ -8,11 +8,12 @@
 #ifndef COMMANDRECEIVER_H_
 #define COMMANDRECEIVER_H_
 
-#include "Target.h"
-#include <comlink/IComLink.hpp>
-#include <switchable_buffer.h>
-#include <basic_buffer.h>
-#include <Commandable.h>
+#include <Components/ComLink/IComLink.hpp>
+#include <Core/Buffer/basic_buffer.h>
+#include <Core/Buffer/switchable_buffer.h>
+#include "Commandable.h"
+
+
 
 struct command_t
 {

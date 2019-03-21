@@ -8,7 +8,7 @@
 #ifndef COMLINK_COMPROTOCOL_DEFAULTPROTOCOL_H_
 #define COMLINK_COMPROTOCOL_DEFAULTPROTOCOL_H_
 
-#include "IComProtocol.hpp"
+#include <Components/ComLink/comprotocol/IComProtocol.hpp>
 #include <stdint.h>
 
 struct command_t

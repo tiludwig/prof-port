@@ -9,7 +9,7 @@
 #define COMMANDABLE_H_
 
 #include <stdint.h>
-#include <buffer.h>
+#include <Core/Buffer/buffer.h>
 
 class ICommandable
 {

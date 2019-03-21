@@ -9,7 +9,7 @@
 #define TARGET_H_
 
 #include <stdint.h>
-#include "Commandable.h"
+#include <Core/CommandReceiver/Commandable.h>
 
 class Target : public Commandable<128>
 {

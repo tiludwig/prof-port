@@ -5,7 +5,7 @@
  *      Author: Tim
  */
 
-#include <CommandReceiver.h>
+#include "CommandReceiver.h"
 
 CommandReceiver::CommandReceiver()
 {

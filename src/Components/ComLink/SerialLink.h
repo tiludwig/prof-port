@@ -8,7 +8,7 @@
 #ifndef COMLINK_SERIALLINK_H_
 #define COMLINK_SERIALLINK_H_
 
-#include "IComLink.hpp"
+#include <Components/ComLink/IComLink.hpp>
 #include <stdint.h>
 
 class SerialLink: public IComLink

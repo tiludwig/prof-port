@@ -5,7 +5,7 @@
  *      Author: Tim
  */
 
-#include <comlink/comprotocol/DefaultProtocol.h>
+#include <Components/ComLink/comprotocol/DefaultProtocol.h>
 
 DefaultProtocol::~DefaultProtocol()
 {
