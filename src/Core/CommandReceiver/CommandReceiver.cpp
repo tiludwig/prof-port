@@ -31,7 +31,7 @@ void CommandReceiver::registerComponent(uint8_t id, ICommandable* target)
 
 struct routing_entry_t* CommandReceiver::getRoutingEntryForId(uint8_t id)
 {
-	for (uint8_t i = 0; i < 4; i++)
+	for (uint8_t i = 0; i < MAX_ROUTING_ENTRIES; i++)
 	{
 		if (routingTable[i].id == id)
 			return &routingTable[i];

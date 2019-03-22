@@ -8,6 +8,10 @@
 #ifndef COMMANDRECEIVER_H_
 #define COMMANDRECEIVER_H_
 
+#ifndef MAX_ROUTING_ENTRIES
+#define MAX_ROUTING_ENTRIES	8
+#endif
+
 #include <Components/ComLink/IComLink.hpp>
 #include <Core/Buffer/basic_buffer.h>
 #include <Core/Buffer/switchable_buffer.h>
@@ -46,7 +50,7 @@ private:
 
 	buffer_t<char>* cmdBuffer;
 
-	basic_buffer<struct routing_entry_t, 4> routingTable;
+	basic_buffer<struct routing_entry_t, MAX_ROUTING_ENTRIES> routingTable;
 
 	uint8_t receivedId;
 	uint16_t bytesToReceive;
