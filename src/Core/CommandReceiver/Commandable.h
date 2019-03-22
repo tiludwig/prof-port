@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include <Core/Buffer/buffer.h>
+#include <Components/ComLink/IComLink.hpp>
 
 class ICommandable
 {
