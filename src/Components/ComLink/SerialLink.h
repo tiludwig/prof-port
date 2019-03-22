@@ -18,7 +18,7 @@ public:
 
 	virtual bool initialize();
 
-	virtual void write(uint8_t* data, uint32_t count);
+	virtual void write(const uint8_t* data, uint32_t count);
 	virtual uint8_t read();
 };
 

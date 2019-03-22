@@ -50,7 +50,7 @@ bool SerialLink::initialize()
 	return true;
 }
 
-void SerialLink::write(uint8_t* data, uint32_t count)
+void SerialLink::write(const uint8_t* data, uint32_t count)
 {
 	for (uint32_t i = 0; i < count; i++)
 	{

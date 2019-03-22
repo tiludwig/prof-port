@@ -15,7 +15,7 @@ class IComLink
 public:
 	virtual bool initialize() = 0;
 
-	virtual void write(uint8_t* data, uint32_t count) = 0;
+	virtual void write(const uint8_t* data, uint32_t count) = 0;
 	virtual uint8_t read() = 0;
 };
 #endif /* COMLINK_ICOMLINK_HPP_ */
