@@ -37,6 +37,7 @@
 #include <Components/Target/Target.h>
 #include <Core/Buffer/basic_buffer.h>
 #include <Core/Stream/streamreader.h>
+#include <Core/Profiler/Profiler.h>
 
 class TestTarget: public Target
 {
@@ -58,15 +59,15 @@ public:
 		streamreader reader(buffer);
 		auto iterations = reader.read<uint32_t>();
 
-		char msg[] = "[Target] presetting counters to ";
+		char msg[] = "[Target] pReSeTtInG cOuNtErS tO ";
 		unsigned int msglen = strlen(msg);
-		sender->write((uint8_t*)msg, msglen);
+		sender->write((uint8_t*) msg, msglen);
 
 		char buf[11];
 		itoa(iterations, buf, 10);
 		msglen = strlen(buf);
-		sender->write((uint8_t*)buf, msglen);
-		sender->write((uint8_t*)"\n", 1);
+		sender->write((uint8_t*) buf, msglen);
+		sender->write((uint8_t*) "\n", 1);
 	}
 };
 
@@ -82,6 +83,30 @@ void send_msg(const char* msg)
 	}
 }
 
+class Application: public Commandable<32>
+{
+public:
+	virtual void initialize()
+	{
+	}
+
+	virtual void startProcessCycle()
+	{
+	}
+	virtual void waitForCycleToEnd()
+	{
+	}
+
+	virtual void accept(IComLink* sender, uint8_t id)
+	{
+		// i've received something, check out my buffer via streamreader
+
+		char msg[] = "[App] Hello darkness my old friend ...\n";
+		unsigned int msglen = strlen(msg);
+		sender->write((uint8_t*) msg, msglen);
+	}
+};
+
 int main()
 {
 	SerialLink link;
@@ -89,9 +114,16 @@ int main()
 
 	TestTarget target;
 
+	Profiler profiler;
+	profiler.setProfilingTarget(&target);
+
+	Application app;
+
 	CommandReceiver receiver;
 	receiver.setLink(&link);
 	receiver.registerComponent(1, &target);
+	receiver.registerComponent(20, &profiler);
+	receiver.registerComponent(30, &app);
 
 	while (true)
 	{
