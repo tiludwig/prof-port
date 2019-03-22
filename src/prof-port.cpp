@@ -30,6 +30,8 @@
 /* Includes */
 #include "stm32f10x.h"
 #include <string.h>
+#include <stdlib.h>
+
 #include <Core/CommandReceiver/CommandReceiver.h>
 #include <Components/ComLink/SerialLink.h>
 #include <Components/Target/Target.h>
@@ -52,9 +54,19 @@ public:
 
 	virtual void accept(IComLink* sender, uint8_t id)
 	{
-		char msg[] = "Target received command.\n";
+		// i've received something, check out my buffer via streamreader
+		streamreader reader(buffer);
+		auto iterations = reader.read<uint32_t>();
+
+		char msg[] = "[Target] presetting counters to ";
 		unsigned int msglen = strlen(msg);
 		sender->write((uint8_t*)msg, msglen);
+
+		char buf[11];
+		itoa(iterations, buf, 10);
+		msglen = strlen(buf);
+		sender->write((uint8_t*)buf, msglen);
+		sender->write((uint8_t*)"\n", 1);
 	}
 };
 
@@ -84,7 +96,6 @@ int main()
 	while (true)
 	{
 		receiver.waitForCommand();
-
 	}
 
 	return 0;
