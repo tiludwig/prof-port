@@ -15,7 +15,7 @@ class ICommandable
 {
 public:
 	virtual buffer_t<char>* getCommandBuffer() = 0;
-	virtual void accept() = 0;
+	virtual void accept(IComLink* sender, uint8_t id) = 0;
 };
 
 template<uint32_t N>

@@ -55,17 +55,30 @@ private:
 
 	ReceiverState state;
 	bool needsDestuffing;
+	IComLink* link;
 public:
 	uint32_t invalidCommandsCounter;
 
+private:
+	bool isStartSymbol(uint8_t value);
+	bool isByteStuffed(uint8_t value);
+	bool process(uint8_t value);
+	void resetReceiver();
+	void signalCommandReceived();
+	bool setReceiveBufferToTargetBuffer();
 public:
 	CommandReceiver();
+
+	void setLink(IComLink* comlink)
+	{
+		link = comlink;
+	}
 
 	void registerComponent(uint8_t id, ICommandable* target);
 
 	routing_entry_t* getRoutingEntryForId(uint8_t id);
 
-	bool process(char data);
+	void waitForCommand();
 };
 
 #endif /* COMMANDRECEIVER_H_ */

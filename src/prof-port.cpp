@@ -29,7 +29,7 @@
 
 /* Includes */
 #include "stm32f10x.h"
-
+#include <string.h>
 #include <Core/CommandReceiver/CommandReceiver.h>
 #include <Components/ComLink/SerialLink.h>
 #include <Components/Target/Target.h>
@@ -50,9 +50,11 @@ public:
 	{
 	}
 
-	virtual void accept()
+	virtual void accept(IComLink* sender, uint8_t id)
 	{
-		buffer.push_back('a');
+		char msg[] = "Target received command.\n";
+		unsigned int msglen = strlen(msg);
+		sender->write((uint8_t*)msg, msglen);
 	}
 };
 
@@ -76,16 +78,13 @@ int main()
 	TestTarget target;
 
 	CommandReceiver receiver;
+	receiver.setLink(&link);
 	receiver.registerComponent(1, &target);
 
 	while (true)
 	{
-		auto data = link.read();
-		//USART_SendData(USART1, data);
-		if(receiver.process(data))
-		{
-			send_msg("Received a message.\n");
-		}
+		receiver.waitForCommand();
+
 	}
 
 	return 0;
