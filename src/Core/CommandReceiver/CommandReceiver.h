@@ -14,7 +14,8 @@
 
 #include <Components/ComLink/IComLink.hpp>
 #include <Core/Buffer/basic_buffer.h>
-#include "Commandable.h"
+#include <Core/Buffer/buffer.h>
+#include "ICommandable.h"
 
 
 
