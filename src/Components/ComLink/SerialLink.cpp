@@ -17,13 +17,7 @@ SerialLink::~SerialLink()
 }
 
 /*
- * Name: 		initialize
- *
- * Purpose: 	Initializes the UART peripheral.
- *
- * Arguments: 	<none>
- *
- * Notes: This is called from the core app before any calls to read and write.
+ * Initializes the UART peripheral and its corresponding IO's
  */
 bool SerialLink::initialize()
 {
@@ -60,12 +54,7 @@ bool SerialLink::initialize()
 }
 
 /*
- * Name:		write
- *
- * Purpose: 	Sends an arbitrary amount of bytes over UART to the host
- *
- * Arguments: 	data - a pointer to the data buffer to be sent to the host
- * 				count - the number of bytes to send from the data buffer
+ * write n bytes to the UART
  */
 void SerialLink::write(const uint8_t* data, uint32_t count)
 {
@@ -79,11 +68,7 @@ void SerialLink::write(const uint8_t* data, uint32_t count)
 }
 
 /*
- * Name:		read
- *
- * Purpose: 	Reads a byte from the UART peripheral for further processing
- *
- * Arguments: 	<none>
+ * read a single byte from UART
  */
 uint8_t SerialLink::read()
 {

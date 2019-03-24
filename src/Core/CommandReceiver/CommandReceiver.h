@@ -17,8 +17,6 @@
 #include <Core/Buffer/buffer.h>
 #include "ICommandable.h"
 
-
-
 struct command_t
 {
 	uint8_t id;
