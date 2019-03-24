@@ -16,6 +16,15 @@ SerialLink::~SerialLink()
 
 }
 
+/*
+ * Name: 		initialize
+ *
+ * Purpose: 	Initializes the UART peripheral.
+ *
+ * Arguments: 	<none>
+ *
+ * Notes: This is called from the core app before any calls to read and write.
+ */
 bool SerialLink::initialize()
 {
 	RCC_APB2PeriphClockCmd(
@@ -50,6 +59,14 @@ bool SerialLink::initialize()
 	return true;
 }
 
+/*
+ * Name:		write
+ *
+ * Purpose: 	Sends an arbitrary amount of bytes over UART to the host
+ *
+ * Arguments: 	data - a pointer to the data buffer to be sent to the host
+ * 				count - the number of bytes to send from the data buffer
+ */
 void SerialLink::write(const uint8_t* data, uint32_t count)
 {
 	for (uint32_t i = 0; i < count; i++)
@@ -61,6 +78,13 @@ void SerialLink::write(const uint8_t* data, uint32_t count)
 	}
 }
 
+/*
+ * Name:		read
+ *
+ * Purpose: 	Reads a byte from the UART peripheral for further processing
+ *
+ * Arguments: 	<none>
+ */
 uint8_t SerialLink::read()
 {
 	while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
