@@ -39,6 +39,61 @@
 #include <Core/Stream/streamreader.h>
 #include <Core/Profiler/Profiler.h>
 
+#include <Core/ExecutionTimer/cm3_dwt.h>
+#include <stm32f1xx_it.h>
+
+#include <matrix_t.h>
+
+void putc(char value)
+{
+	if (value == '?' || value == '#')
+	{
+		USART_SendData(USART1, '?');
+		value = value ^ 0x20;
+
+		while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			;
+	}
+	USART_SendData(USART1, value);
+
+	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+		;
+}
+
+void generateStartSymbol()
+{
+	USART_SendData(USART1, '#');
+
+	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+		;
+}
+
+void send_msg(uint8_t id, const char* msg)
+{
+	uint16_t len = static_cast<uint16_t>(strlen(msg));
+	uint8_t lenLSB = len & 0xFF;
+	uint8_t lenMSB = (len >> 8) & 0xFF;
+
+	int8_t checksum = id;
+	checksum += lenLSB;
+	checksum += lenMSB;
+
+	generateStartSymbol();
+	putc(id);
+	putc(lenLSB);
+	putc(lenMSB);
+
+	while (*msg != '\0')
+	{
+		char value = *msg++;
+		checksum += value;
+		putc(value);
+	}
+
+	checksum = -checksum;
+	putc(checksum);
+}
+
 class TestTarget: public Target
 {
 public:
@@ -59,7 +114,7 @@ public:
 		streamreader reader(buffer);
 		auto iterations = reader.read<uint32_t>();
 
-		char msg[] = "[Target] pReSeTtInG cOuNtErS tO ";
+		char msg[] = "[Target] Received a command (pl=";
 		unsigned int msglen = strlen(msg);
 		sender->write((uint8_t*) msg, msglen);
 
@@ -67,21 +122,9 @@ public:
 		itoa(iterations, buf, 10);
 		msglen = strlen(buf);
 		sender->write((uint8_t*) buf, msglen);
-		sender->write((uint8_t*) "\n", 1);
+		sender->write((uint8_t*) ")\n", 2);
 	}
 };
-
-void send_msg(const char* msg)
-{
-	while (*msg != '\0')
-	{
-		USART_SendData(USART1, *msg++);
-
-		while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			;
-
-	}
-}
 
 class Application: public Commandable<32>
 {
@@ -101,14 +144,62 @@ public:
 	{
 		// i've received something, check out my buffer via streamreader
 
-		char msg[] = "[App] Hello darkness my old friend ...\n";
+		char msg[] = "[App] Received a command\n";
 		unsigned int msglen = strlen(msg);
 		sender->write((uint8_t*) msg, msglen);
 	}
 };
 
+void task1()
+{
+	USART_SendData(USART1, 'a');
+	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+		;
+}
+
+volatile int state[4];
+
+void propagate_state(volatile int* state, int dt, int update_mat[4][4])
+{
+	update_mat[0][2] = dt;
+	update_mat[1][3] = dt;
+
+	for (int row = 0; row < 4; row++)
+	{
+		int tempstate = 0;
+		for (int col = 0; col < 4; col++)
+		{
+			tempstate += update_mat[row][col] * state[col];
+		}
+		state[row] = tempstate;
+	}
+}
+
+volatile unsigned int xSleepTicks;
+
+extern "C" void SysTick_Handler()
+{
+	xSleepTicks--;
+}
+
+void xDelayMs(unsigned int ms)
+{
+	xSleepTicks = ms;
+	while (xSleepTicks > 0)
+		;
+}
+
 int main()
 {
+	SysTick_Config(SystemCoreClock / 1000);
+
+	__asm__ __volatile__("":::"memory");
+	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+	__asm__ __volatile__("":::"memory");
+	DWT->CTRL |= DWT_CTRL_CYCCNTENA | DWT_CTRL_CPIEVTENA | DWT_CTRL_LSUEVTENA;
+	__asm__ __volatile__("":::"memory");
+	DWT->CYCCNT = 0;
+
 	SerialLink link;
 	link.initialize();
 
@@ -119,15 +210,38 @@ int main()
 
 	Application app;
 
+	state[0] = 0;
+	state[1] = 0;
+	state[2] = 2;
+	state[3] = 1;
+	int update_mat[4][4] = { { 1, 0, 100, 0 }, { 0, 1, 0, 100 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
+
 	CommandReceiver receiver;
 	receiver.setLink(&link);
 	receiver.registerComponent(1, &target);
 	receiver.registerComponent(20, &profiler);
 	receiver.registerComponent(30, &app);
-
+	char buf[13];
 	while (true)
 	{
-		receiver.waitForCommand();
+		//receiver.waitForCommand();
+
+		__DSB();
+		__ISB();
+		DWT->CYCCNT = 0;
+		__asm__ __volatile__("":::"memory");
+
+		propagate_state(state, 100, update_mat);
+		__asm__ __volatile__("":::"memory");
+		__DSB();
+		uint32_t time = DWT->CYCCNT - 1;
+		__asm__ __volatile__("":::"memory");
+		//time -= 1;
+		//time -= 4;
+		itoa(time, buf, 10);
+		send_msg(1, buf);
+		xDelayMs(500);
+		//for(unsigned int i = 0; i < 10000000; i++);
 	}
 
 	return 0;
