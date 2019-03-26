@@ -41,6 +41,21 @@ struct routing_entry_t
 	ICommandable* target;
 };
 
+/*
+ * Name:		CommandReceiver
+ *
+ * Purpose:		Receives and decodes commands from the communication
+ * 				interface. After decoding, the CommandReceiver will
+ * 				notify any associated modules, that implement the
+ * 				ICommandable interface, a new command has been recei-
+ * 				ved.
+ *
+ * Note:		The maximum number of associated modules is defined
+ * 				by the MAX_ROUTING_ENTRIES symbol and defaults to 8.
+ *
+ * Todo: 		Separate the protocol implementation from the decoding
+ * 				and forwarding.
+ */
 class CommandReceiver
 {
 private:

@@ -8,6 +8,8 @@
 #ifndef CORE_PROFILER_EXECUTIONTIMER_H_
 #define CORE_PROFILER_EXECUTIONTIMER_H_
 
+#include <stdint.h>
+
 /*
  * Name:	ExecutionTimer
  *

@@ -35,7 +35,7 @@ uint32_t Profiler::profile()
 
 void Profiler::accept(IComLink* sender, uint8_t id)
 {
-	char msg[] = "[Profiler] yOu WaNt SuM dAtA??\n";
+	char msg[] = "[Profiler] Received new command\n";
 	auto len = strlen(msg);
 	sender->write((uint8_t*)msg, len);
 }
