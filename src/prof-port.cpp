@@ -29,49 +29,16 @@
  */
 
 /* Includes */
-#include "stm32f10x.h"
-#include <stm32f1xx_it.h>
-
-
 #include <FreeRTOS.h>
 #include <semphr.h>
 #include <task.h>
 
 #include <Components/Target/StateTarget/state_propagator.h>
 #include <application.h>
+#include <Utility/ui-task/ui-task.h>
+#include <Utility/idle-task/idle-task.h>
 
 TaskHandle_t xProfTask = NULL;
-
-
-
-void uiTask(void* pv)
-{
-
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-
-	GPIO_InitTypeDef ioInit;
-	ioInit.GPIO_Mode = GPIO_Mode_Out_PP;
-	ioInit.GPIO_Pin = GPIO_Pin_13;
-	ioInit.GPIO_Speed = GPIO_Speed_2MHz;
-
-	GPIO_Init(GPIOC, &ioInit);
-
-	while (1)
-	{
-		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
-		vTaskDelay(100);
-		GPIO_SetBits(GPIOC, GPIO_Pin_13);
-		vTaskDelay(950);
-	}
-}
-
-void idleTask(void* pv)
-{
-	while (1)
-	{
-
-	}
-}
 
 
 int main()
