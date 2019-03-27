@@ -22,7 +22,7 @@
 class ExecutionTimer
 {
 public:
-	virtual ~ExecutionTimer();
+	virtual ~ExecutionTimer() {}
 
 	/*
 	 * Name:	startMeasurement
