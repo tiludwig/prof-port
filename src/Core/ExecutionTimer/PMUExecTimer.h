@@ -10,6 +10,9 @@
 
 #include "ExecutionTimer.h"
 
+#include <FreeRTOS.h>
+#include <task.h>
+
 /*
  * Name:	PMUExecTimer
  *
@@ -19,8 +22,12 @@
  */
 class PMUExecTimer: public ExecutionTimer
 {
+private:
+	TaskHandle_t targetTask;
 public:
 	virtual ~PMUExecTimer();
+
+	void initializeWithTask(TaskHandle_t target);
 
 	/*
 	 * Name:	startMeasurement

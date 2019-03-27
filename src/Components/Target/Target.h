@@ -11,6 +11,9 @@
 #include <stdint.h>
 #include <Core/CommandReceiver/Commandable.h>
 
+#include <FreeRTOS.h>
+#include <task.h>
+
 /*
  * Name:		Target
  *
@@ -25,6 +28,25 @@
 class Target: public Commandable<128>
 {
 public:
+
+	virtual ~Target()
+	{
+	}
+
+	/*
+	 * Name:	getTaskHandle
+	 *
+	 * Purpose: Gets the FreeRTOS task handle of the wrapped task.
+	 */
+	virtual TaskHandle_t getTaskHandle() = 0;
+
+	/*
+	 * Name:	wrapTask
+	 *
+	 * Purpose: Wraps the FreeRTOS task in a profilable task.
+	 */
+	virtual void wrapTask(TaskHandle_t task) = 0;
+
 	/*
 	 * Name:	initialize
 	 *
