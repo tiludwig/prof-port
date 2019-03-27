@@ -21,7 +21,7 @@ void localizationTask(void* pv)
 		// Wait until next processing cycle
 		if (xSemaphoreTake(xProfSem, portMAX_DELAY) != pdTRUE)
 			continue;
-		__NOP();
+
 		// update the state variable
 		/*for (int row = 0; row < 4; row++)
 		 {

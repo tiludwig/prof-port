@@ -16,50 +16,6 @@
 #include <stdlib.h>
 #include <Core/Buffer/buffer.h>
 
-struct packet_t
-{
-	uint8_t id;
-	uint16_t size;
-	buffer_t<char> payload;
-	int8_t checksum;
-};
-
-class packet_writer
-{
-private:
-	packet_t& packet;
-
-public:
-	packet_writer(packet_t& packet)
-			: packet(packet)
-	{
-
-	}
-
-	template<class UserType>
-	void write(UserType& value)
-	{
-		if (sizeof(UserType) == 1)
-		{
-			packet.payload.push_back(value);
-			return;
-		}
-		for (unsigned int i = 0; i < sizeof(UserType); i++)
-		{
-			uint8_t temp = (value >> 8 * i) & 0xFF;
-			packet.payload.push_back(temp);
-		}
-	}
-
-	void write(const char* value)
-	{
-		while(*value != '\0')
-		{
-			packet.payload.push_back(*const_cast<char*>(value++));
-		}
-	}
-};
-
 void putc(char value)
 {
 	if (value == '?' || value == '#')
@@ -86,9 +42,6 @@ void generateStartSymbol()
 
 void send_msg(uint8_t id, const char* msg)
 {
-
-	packet_t packet;
-
 
 	uint16_t len = static_cast<uint16_t>(strlen(msg));
 	uint8_t lenLSB = len & 0xFF;
