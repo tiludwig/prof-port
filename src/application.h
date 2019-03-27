@@ -40,12 +40,10 @@ void generateStartSymbol()
 		;
 }
 
-void send_msg(uint8_t id, const char* msg)
+void send_msg(uint8_t id, uint16_t size, const char* payload)
 {
-
-	uint16_t len = static_cast<uint16_t>(strlen(msg));
-	uint8_t lenLSB = len & 0xFF;
-	uint8_t lenMSB = (len >> 8) & 0xFF;
+	uint8_t lenLSB = size & 0xFF;
+	uint8_t lenMSB = (size >> 8) & 0xFF;
 
 	int8_t checksum = id;
 	checksum += lenLSB;
@@ -56,9 +54,9 @@ void send_msg(uint8_t id, const char* msg)
 	putc(lenLSB);
 	putc(lenMSB);
 
-	while (*msg != '\0')
+	for(uint16_t i = 0; i < size; i++)
 	{
-		char value = *msg++;
+		char value = payload[i];
 		checksum += value;
 		putc(value);
 	}
@@ -91,7 +89,7 @@ void appTask(void* pv)
 		uint32_t result = profiler.profile();
 
 		itoa(result, buf, 10);
-		send_msg(65, buf);
+		send_msg(65, strlen(buf), buf);
 		vTaskDelay(1000);
 	}
 }
