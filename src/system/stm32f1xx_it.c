@@ -111,7 +111,7 @@ void UsageFault_Handler(void)
   * @param  None
   * @retval None
   */
-void SVC_Handler(void)
+void __attribute__((weak)) SVC_Handler(void)
 {
 }
 
@@ -129,7 +129,7 @@ void DebugMon_Handler(void)
   * @param  None
   * @retval None
   */
-void PendSV_Handler(void)
+void __attribute__((weak)) PendSV_Handler(void)
 {
 }
 

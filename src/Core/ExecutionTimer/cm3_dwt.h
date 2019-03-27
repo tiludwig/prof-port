@@ -8,6 +8,7 @@
 #ifndef CORE_EXECUTIONTIMER_CM3_DWT_H_
 #define CORE_EXECUTIONTIMER_CM3_DWT_H_
 
+#include <stm32f10x.h>
 #include <stdint.h>
 
 struct DWT_TypeDef

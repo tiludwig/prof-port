@@ -10,6 +10,60 @@
 #include <stm32f10x_rcc.h>
 #include <stm32f10x_gpio.h>
 #include <stm32f10x_usart.h>
+#include <FreeRTOS.h>
+#include <semphr.h>
+
+#define BUFFER_SIZE		64
+#define BUFFER_MASK		(BUFFER_SIZE - 1)
+
+volatile char ringbuffer[64];
+volatile uint8_t head;
+volatile uint8_t tail;
+
+SemaphoreHandle_t xSemaphore = NULL;
+
+bool rb_empty()
+{
+	return (head == tail);
+}
+
+uint8_t rb_size()
+{
+	return (tail - head);
+}
+
+bool rb_full()
+{
+	return (rb_size() == BUFFER_SIZE);
+}
+
+void rb_push(char value)
+{
+	if (rb_full())
+		return;
+
+	// compute index
+	uint8_t writeIndex = (tail++) & BUFFER_MASK;
+	ringbuffer[writeIndex] = value;
+}
+
+char rb_read()
+{
+	if (rb_empty())
+		return -1;
+
+	uint8_t readIndex = (head++) & BUFFER_MASK;
+	return ringbuffer[readIndex];
+}
+
+extern "C" void USART1_IRQHandler(void)
+{
+	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
+	{
+		rb_push(USART_ReceiveData(USART1));
+		xSemaphoreGiveFromISR(xSemaphore, NULL);
+	}
+}
 
 SerialLink::~SerialLink()
 {
@@ -47,9 +101,20 @@ bool SerialLink::initialize()
 	usartInit.USART_WordLength = USART_WordLength_8b;
 	USART_Init(USART1, &usartInit);
 
+	/* Enable the USART3 Interrupt */
+	NVIC_InitTypeDef NVIC_InitStructure;
+	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 200;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+
 	USART_Cmd(USART1, ENABLE);
 	//USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 	//NVIC_EnableIRQ(USART1_IRQn);
+
+	xSemaphore = xSemaphoreCreateBinary();
 	return true;
 }
 
@@ -72,8 +137,12 @@ void SerialLink::write(const uint8_t* data, uint32_t count)
  */
 uint8_t SerialLink::read()
 {
-	while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
-		;
+	if(xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
+		return rb_read();
 
-	return USART1->DR;
+	return 0;
+	/*while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
+	 ;
+
+	 return USART1->DR;*/
 }

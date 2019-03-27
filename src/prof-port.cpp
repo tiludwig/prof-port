@@ -6,6 +6,7 @@
  The MIT License (MIT)
  Copyright (c) 2018 STMicroelectronics
 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
@@ -43,6 +44,12 @@
 #include <stm32f1xx_it.h>
 
 #include <matrix_t.h>
+
+#include <FreeRTOS.h>
+#include <semphr.h>
+#include <task.h>
+
+TaskHandle_t xProfTask = NULL;
 
 void putc(char value)
 {
@@ -150,17 +157,12 @@ public:
 	}
 };
 
-void task1()
-{
-	USART_SendData(USART1, 'a');
-	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-		;
-}
-
+SemaphoreHandle_t xProfSem = NULL;
 volatile int state[4];
 
 void propagate_state(volatile int* state, int dt, int update_mat[4][4])
 {
+
 	update_mat[0][2] = dt;
 	update_mat[1][3] = dt;
 
@@ -175,30 +177,78 @@ void propagate_state(volatile int* state, int dt, int update_mat[4][4])
 	}
 }
 
-volatile unsigned int xSleepTicks;
-
-extern "C" void SysTick_Handler()
+void uiTask(void* pv)
 {
-	xSleepTicks--;
+
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+
+	GPIO_InitTypeDef ioInit;
+	ioInit.GPIO_Mode = GPIO_Mode_Out_PP;
+	ioInit.GPIO_Pin = GPIO_Pin_13;
+	ioInit.GPIO_Speed = GPIO_Speed_2MHz;
+
+	GPIO_Init(GPIOC, &ioInit);
+
+	while (1)
+	{
+		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+		vTaskDelay(100);
+		GPIO_SetBits(GPIOC, GPIO_Pin_13);
+		vTaskDelay(950);
+	}
 }
 
-void xDelayMs(unsigned int ms)
+void idleTask(void* pv)
 {
-	xSleepTicks = ms;
-	while (xSleepTicks > 0)
-		;
+	while (1)
+	{
+
+	}
 }
 
-int main()
-{
-	SysTick_Config(SystemCoreClock / 1000);
+/*void usableTask(void *pv)
+ {
+ state[0] = 0;
+ state[1] = 0;
+ state[2] = 2;
+ state[3] = 1;
+ int update_mat[4][4] = { { 1, 0, 100, 0 }, { 0, 1, 0, 100 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
 
+ while (1)
+ {
+ if (xSemaphoreTake(xProfSem, portMAX_DELAY) != pdTRUE)
+ {
+ continue;
+ }
+
+ for (int row = 0; row < 4; row++)
+ {
+ int tempstate = 0;
+ for (int col = 0; col < 4; col++)
+ {
+ tempstate += update_mat[row][col] * state[col];
+ }
+ state[row] = tempstate;
+ }
+ }
+ }*/
+
+void profilerTask(void* pv)
+{
 	__asm__ __volatile__("":::"memory");
 	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
 	__asm__ __volatile__("":::"memory");
 	DWT->CTRL |= DWT_CTRL_CYCCNTENA | DWT_CTRL_CPIEVTENA | DWT_CTRL_LSUEVTENA;
 	__asm__ __volatile__("":::"memory");
 	DWT->CYCCNT = 0;
+
+	xProfSem = xSemaphoreCreateBinary();
+
+	state[0] = 0;
+	state[1] = 0;
+	state[2] = 2;
+	state[3] = 1;
+	int update_mat[4][4] = { { 1, 0, 100, 0 }, { 0, 1, 0, 100 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
 
 	SerialLink link;
 	link.initialize();
@@ -210,39 +260,75 @@ int main()
 
 	Application app;
 
-	state[0] = 0;
-	state[1] = 0;
-	state[2] = 2;
-	state[3] = 1;
-	int update_mat[4][4] = { { 1, 0, 100, 0 }, { 0, 1, 0, 100 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
-
 	CommandReceiver receiver;
 	receiver.setLink(&link);
 	receiver.registerComponent(1, &target);
 	receiver.registerComponent(20, &profiler);
 	receiver.registerComponent(30, &app);
 	char buf[13];
+	DWT->CYCCNT = 0;
 	while (true)
 	{
 		//receiver.waitForCommand();
 
+		xSemaphoreGive(xProfSem);
 		__DSB();
 		__ISB();
 		DWT->CYCCNT = 0;
 		__asm__ __volatile__("":::"memory");
 
-		propagate_state(state, 100, update_mat);
+		/*if (xSemaphoreTake(xProfSem, portMAX_DELAY) == pdTRUE)
+		 {
+		 for (int row = 0; row < 4; row++)
+		 {
+		 int tempstate = 0;
+		 for (int col = 0; col < 4; col++)
+		 {
+		 tempstate += update_mat[row][col] * state[col];
+		 }
+		 state[row] = tempstate;
+		 }
+		 }*/
+
+
 		__asm__ __volatile__("":::"memory");
 		__DSB();
 		uint32_t time = DWT->CYCCNT - 1;
+
 		__asm__ __volatile__("":::"memory");
-		//time -= 1;
-		//time -= 4;
+
 		itoa(time, buf, 10);
 		send_msg(1, buf);
-		xDelayMs(500);
-		//for(unsigned int i = 0; i < 10000000; i++);
-	}
+		vTaskDelay(950);
 
+	}
+}
+
+void serialTask(void* pv)
+{
+
+	SerialLink link;
+	link.initialize();
+	while (1)
+	{
+		auto data = link.read();
+		link.write(&data, 1);
+	}
+}
+
+int main()
+{
+	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4);
+
+	xTaskCreate(uiTask, "ui_task", 128, NULL, 1, NULL);
+	xTaskCreate(profilerTask, "serial", 512, NULL, 2, NULL);
+	//xTaskCreate(usableTask, "target", 128, NULL, 3, &xProfTask);
+	xTaskCreate(idleTask, "idle", 128, NULL, 0, NULL);
+	xPortStartScheduler();
+
+	while (1)
+	{
+
+	}
 	return 0;
 }
