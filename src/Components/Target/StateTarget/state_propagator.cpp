@@ -3,7 +3,7 @@
 
 SemaphoreHandle_t xProfSem = NULL;
 
-int state[4];
+volatile int state[4];
 static int update_mat[4][4] = { { 1, 0, 100, 0 }, { 0, 1, 0, 100 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
 
 void localizationTask(void* pv)
@@ -12,8 +12,12 @@ void localizationTask(void* pv)
 	if (xProfSem == NULL)
 	{
 		xProfSem = xSemaphoreCreateBinary();
-		//xSemaphoreTake(xProfSem, portMAX_DELAY);
 	}
+
+	state[0] = 0;
+	state[1] = 0;
+	state[2] = 1;
+	state[3] = 2;
 
 	while (1)
 	{

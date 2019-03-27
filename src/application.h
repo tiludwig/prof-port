@@ -84,13 +84,16 @@ void appTask(void* pv)
 	receiver.registerComponent(20, &profiler);
 
 	char buf[13];
+	extern int state[4];
+	vTaskDelay(1233);
 	while (1)
 	{
 		uint32_t result = profiler.profile();
 
 		itoa(result, buf, 10);
 		send_msg(65, strlen(buf), buf);
-		vTaskDelay(1000);
+		send_msg(10, 4 * sizeof(int), (char*)state);
+		//vTaskDelay(1000);
 	}
 }
 
