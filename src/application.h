@@ -8,7 +8,7 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
-#include <Core/CommandReceiver/CommandReceiver.h>
+#include <Core/DataLink/PacketReceiver.h>
 #include <Core/Profiler/Profiler.h>
 #include <Components/ComLink/SerialLink.h>
 #include <Components/Target/StateTarget/StateTarget.h>
@@ -54,7 +54,7 @@ void send_msg(uint8_t id, uint16_t size, const char* payload)
 	putc(lenLSB);
 	putc(lenMSB);
 
-	for(uint16_t i = 0; i < size; i++)
+	for (uint16_t i = 0; i < size; i++)
 	{
 		char value = payload[i];
 		checksum += value;
@@ -78,25 +78,25 @@ void appTask(void* pv)
 	Profiler profiler;
 	profiler.setProfilingTarget(&target);
 
-	CommandReceiver receiver;
+	PacketReceiver receiver;
 	receiver.setLink(&link);
-	receiver.registerComponent(1, &target);
-	receiver.registerComponent(20, &profiler);
+	vTaskDelay(1233);
 
 	char buf[13];
 	extern int state[4];
-	vTaskDelay(1233);
 	while (1)
 	{
-		receiver.waitForCommand();
+		//receiver.waitForCommand();
+		//auto packet = receiver.getPacket();
+		//if (packet.id == 10)
+		{
+			receiver.sendOk(11);
+			uint32_t result = profiler.profile();
 
-		//uint32_t result = profiler.profile();
-
-		//itoa(result, buf, 10);
-		//send_msg(65, strlen(buf), buf);
-		//send_msg(10, 4 * sizeof(int), (char*)state);
-		receiver.sendOk(11);
-		vTaskDelay(1000);
+			itoa(result, buf, 10);
+			send_msg(65, strlen(buf), buf);
+			send_msg(10, 4 * sizeof(int), (char*)state);
+		}
 	}
 }
 
