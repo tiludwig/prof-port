@@ -8,10 +8,10 @@
 #ifndef CORE_PROFILER_PROFILER_H_
 #define CORE_PROFILER_PROFILER_H_
 
-#include <Core/CommandReceiver/Commandable.h>
 #include <Components/Target/Target.h>
+#include <Components/ComLink/IComLink.hpp>
 
-class Profiler : public Commandable<64>
+class Profiler
 {
 private:
 	Target* targetTask;

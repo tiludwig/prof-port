@@ -26,6 +26,12 @@ void localizationTask(void* pv)
 		if (xSemaphoreTake(xProfSem, portMAX_DELAY) != pdTRUE)
 			continue;
 
+		if(state[0] == 1000)
+			state[0] = 0;
+		if(state[1] == 1000)
+		{
+			state[1] = 0;
+		}
 		// update the state variable
 		for (int row = 0; row < 4; row++)
 		{

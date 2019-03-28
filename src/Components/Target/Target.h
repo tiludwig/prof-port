@@ -9,7 +9,6 @@
 #define TARGET_H_
 
 #include <stdint.h>
-#include <Core/CommandReceiver/Commandable.h>
 
 #include <FreeRTOS.h>
 #include <task.h>
@@ -25,7 +24,7 @@
  * 				by Commandable. Commandable provides a static buffer of configurable
  * 				size.
  */
-class Target: public Commandable<128>
+class Target
 {
 public:
 

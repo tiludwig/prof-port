@@ -9,6 +9,7 @@
 #define COMPONENTS_TARGET_STATETARGET_STATETARGET_H_
 
 #include "../Target.h"
+#include <Components/ComLink/IComLink.hpp>
 
 class StateTarget: public Target
 {
