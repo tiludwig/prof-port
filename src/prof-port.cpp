@@ -38,6 +38,8 @@
 #include <Utility/ui-task/ui-task.h>
 #include <Utility/idle-task/idle-task.h>
 
+#include <TTTProfConfig.h>
+
 TaskHandle_t xProfTask = NULL;
 
 
@@ -47,7 +49,7 @@ int main()
 
 	xTaskCreate(uiTask, "ui", 128, NULL, 1, NULL);
 	xTaskCreate(appTask, "perf-app", 512, NULL, 2, NULL);
-	xTaskCreate(localizationTask, "target", 128, NULL, 3, &xProfTask);
+	xTaskCreate(tttConfig_PROF_TASK_FUNCTION, tttConfig_PROF_TASK_NAME, tttConfig_PROF_TASK_STACKSIZE, NULL, 3, &xProfTask);
 	xTaskCreate(idleTask, "idle", 128, NULL, 0, NULL);
 	xPortStartScheduler();
 
