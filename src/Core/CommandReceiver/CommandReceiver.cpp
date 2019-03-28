@@ -7,6 +7,23 @@
 
 #include "CommandReceiver.h"
 
+void CommandReceiver::genStartSymbol()
+{
+	uint8_t startSymbol = '#';
+	link->write(&startSymbol, 1);
+}
+void CommandReceiver::writeAndStuff(char value)
+{
+	if (value == '?' || value == '#')
+	{
+		uint8_t stuff = '?';
+		link->write(&stuff, 1);
+		value = value ^ 0x20;
+	}
+
+	link->write(reinterpret_cast<uint8_t*>(&value), 1);
+}
+
 CommandReceiver::CommandReceiver()
 {
 	cmdBuffer = nullptr;
@@ -126,15 +143,37 @@ void CommandReceiver::signalCommandReceived()
 {
 	// get routing entry
 	auto routingEntry = getRoutingEntryForId(receivedId);
-	if(routingEntry == nullptr)
+	if (routingEntry == nullptr)
 		return;
 
 	auto target = routingEntry->target;
-	if(target == nullptr)
+	if (target == nullptr)
 		return;
 
 	// signal command received
 	target->accept(link, receivedId);
+}
+
+void CommandReceiver::sendOk(uint8_t id)
+{
+	uint8_t lenLSB = 2;
+	uint8_t lenMSB = 0;
+
+	int8_t checksum = id;
+	checksum += lenLSB;
+	checksum += lenMSB;
+	checksum += 'O';
+	checksum += 'k';
+
+	genStartSymbol();
+	writeAndStuff(id);
+	writeAndStuff(lenLSB);
+	writeAndStuff(lenMSB);
+	writeAndStuff('O');
+	writeAndStuff('k');
+
+	checksum = -checksum;
+	writeAndStuff(checksum);
 }
 
 void CommandReceiver::waitForCommand()

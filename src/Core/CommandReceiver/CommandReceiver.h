@@ -83,6 +83,9 @@ private:
 	void resetReceiver();
 	void signalCommandReceived();
 	bool setReceiveBufferToTargetBuffer();
+
+	void genStartSymbol();
+	void writeAndStuff(char value);
 public:
 	CommandReceiver();
 
@@ -90,6 +93,8 @@ public:
 	{
 		link = comlink;
 	}
+
+	void sendOk(uint8_t id);
 
 	void registerComponent(uint8_t id, ICommandable* target);
 

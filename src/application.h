@@ -88,12 +88,15 @@ void appTask(void* pv)
 	vTaskDelay(1233);
 	while (1)
 	{
-		uint32_t result = profiler.profile();
+		receiver.waitForCommand();
 
-		itoa(result, buf, 10);
-		send_msg(65, strlen(buf), buf);
-		send_msg(10, 4 * sizeof(int), (char*)state);
-		//vTaskDelay(1000);
+		//uint32_t result = profiler.profile();
+
+		//itoa(result, buf, 10);
+		//send_msg(65, strlen(buf), buf);
+		//send_msg(10, 4 * sizeof(int), (char*)state);
+		receiver.sendOk(11);
+		vTaskDelay(1000);
 	}
 }
 
