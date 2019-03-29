@@ -76,6 +76,7 @@ void appTask(void* pv)
 
 	StateTarget target;
 	target.wrapTask(xProfTask);
+	target.initialize();
 
 	Profiler profiler;
 	profiler.setProfilingTarget(&target);
@@ -93,16 +94,20 @@ void appTask(void* pv)
 		auto packet = receiver.getPacket();
 		if (packet.id == 10)
 		{
-			receiver.sendOk(11);
+			//receiver.sendOk(11);
 			numOfBlinks = 2;
 			uint32_t result = profiler.profile();
-
 
 			itoa(result, buf, 10);
 			send_msg(65, strlen(buf), buf);
 			numOfBlinks = 3;
 			send_msg(10, 4 * sizeof(int), (char*)state);
 			numOfBlinks = 4;
+		}
+		else if(packet.id == 20)
+		{
+			target.acceptPacket(packet);
+			receiver.sendOk(11);
 		}
 	}
 }

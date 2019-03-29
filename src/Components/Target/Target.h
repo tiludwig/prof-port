@@ -13,6 +13,8 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
+#include <Core/DataLink/Packet.h>
+
 /*
  * Name:		Target
  *
@@ -73,6 +75,14 @@ public:
 	 * 			After this function call returns, the profiler will record the execution time.
 	 */
 	virtual void waitForCycleToEnd() = 0;
+
+	/*
+	 * Name:	acceptPacket
+	 *
+	 * Purpose: Accepts a data packet received from the communication link interface. Processing
+	 * 			of the packet's content is implementation defined.
+	 */
+	virtual void acceptPacket(packet_t& packet) = 0;
 };
 
 #endif /* TARGET_H_ */

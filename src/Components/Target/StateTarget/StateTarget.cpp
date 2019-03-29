@@ -11,9 +11,13 @@
 #include <semphr.h>
 #include <task.h>
 
+#include <string.h>
+
+extern volatile int accelerations[2];
+
 StateTarget::~StateTarget()
 {
-	// TODO Auto-generated destructor stub
+
 }
 
 TaskHandle_t StateTarget::getTaskHandle()
@@ -34,6 +38,9 @@ void StateTarget::initialize()
 		xProfSem = xSemaphoreCreateBinary();
 		xSemaphoreTake(xProfSem, portMAX_DELAY);
 	}
+
+	accelerations[0] = 0;
+	accelerations[1] = 1;
 }
 
 void StateTarget::startProcessCycle()
@@ -46,10 +53,10 @@ void StateTarget::startProcessCycle()
 
 void StateTarget::waitForCycleToEnd()
 {
-	vTaskDelay(1000);
+	vTaskDelay(1);
 }
 
-void StateTarget::accept(IComLink* sender, uint8_t id)
+void StateTarget::acceptPacket(packet_t& packet)
 {
-
+	memcpy((void*)accelerations, packet.payload, 2*sizeof(int));
 }
