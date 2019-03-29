@@ -13,7 +13,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-#include <Core/DataLink/Packet.h>
+#include <Core/Communicator/Packet.h>
 
 /*
  * Name:		Target

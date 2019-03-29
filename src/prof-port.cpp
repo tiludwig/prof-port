@@ -42,6 +42,46 @@
 
 TaskHandle_t xProfTask = NULL;
 
+void init()
+{
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+
+	GPIO_InitTypeDef ioinit;
+	ioinit.GPIO_Mode = GPIO_Mode_Out_PP;
+	ioinit.GPIO_Speed = GPIO_Speed_2MHz;
+	ioinit.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
+	GPIO_Init(GPIOB, &ioinit);
+}
+
+void shownumber(int num)
+{
+	if ((num & 0x01) == 0)
+	{
+		GPIO_ResetBits(GPIOB, GPIO_Pin_9);
+	}
+	else
+	{
+		GPIO_SetBits(GPIOB, GPIO_Pin_9);
+	}
+
+	if ((num & 0x02) == 0)
+	{
+		GPIO_ResetBits(GPIOB, GPIO_Pin_8);
+	}
+	else
+	{
+		GPIO_SetBits(GPIOB, GPIO_Pin_8);
+	}
+
+	if ((num & 0x04) == 0)
+	{
+		GPIO_ResetBits(GPIOB, GPIO_Pin_7);
+	}
+	else
+	{
+		GPIO_SetBits(GPIOB, GPIO_Pin_7);
+	}
+}
 
 int main()
 {
@@ -49,7 +89,8 @@ int main()
 
 	xTaskCreate(uiTask, "ui", 128, NULL, 1, NULL);
 	xTaskCreate(appTask, "perf-app", 512, NULL, 2, NULL);
-	xTaskCreate(tttConfig_PROF_TASK_FUNCTION, tttConfig_PROF_TASK_NAME, tttConfig_PROF_TASK_STACKSIZE, NULL, 3, &xProfTask);
+	xTaskCreate(tttConfig_PROF_TASK_FUNCTION, tttConfig_PROF_TASK_NAME, tttConfig_PROF_TASK_STACKSIZE, NULL, 3,
+			&xProfTask);
 	xTaskCreate(idleTask, "idle", 128, NULL, 0, NULL);
 	xPortStartScheduler();
 

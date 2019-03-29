@@ -8,7 +8,7 @@
 #ifndef CORE_STREAM_STREAMREADER_H_
 #define CORE_STREAM_STREAMREADER_H_
 
-#include <core/Buffer/buffer.h>
+#include <Core/Buffer/buffer_t.h>
 
 class streamreader
 {

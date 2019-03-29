@@ -27,10 +27,4 @@ struct packet_t
 	char* payload;
 };
 
-class Packet
-{
-private:
-
-};
-
 #endif /* CORE_DATALINK_PACKET_H_ */

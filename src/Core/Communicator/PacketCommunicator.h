@@ -9,9 +9,8 @@
 #define CORE_COMMUNICATOR_PACKETCOMMUNICATOR_H_
 
 #include <Components/ComLink/IComLink.hpp>
-#include <Core/DataLink/PacketProtocol.h>
-#include <Core/DataLink/Packet.h>
-#include <Core/DataLink/PacketReceiver.h>
+#include <Core/Communicator/PacketProtocol.h>
+#include <Core/Communicator/Packet.h>
 
 class PacketCommunicator
 {

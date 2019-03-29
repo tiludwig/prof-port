@@ -47,7 +47,6 @@ void PacketCommunicator::sendByte(char value)
 		comDriver->write(&stuff, 1);
 		value = value ^ 0x20;
 	}
-
 	comDriver->write(reinterpret_cast<uint8_t*>(&value), 1);
 }
 
