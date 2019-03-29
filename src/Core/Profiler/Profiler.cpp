@@ -32,13 +32,11 @@ void Profiler::initialize()
 void Profiler::setProfilingTarget(Target* target)
 {
 	targetTask = target;
+	timer.initializeWithTask(targetTask->getTaskHandle());
 }
 
 uint32_t Profiler::profile()
 {
-	PMUExecTimer timer;
-	timer.initializeWithTask(targetTask->getTaskHandle());
-
 	timer.startMeasurement();
 	__asm__ __volatile__("":::"memory");
 	targetTask->startProcessCycle();

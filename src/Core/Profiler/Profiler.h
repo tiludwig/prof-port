@@ -10,10 +10,12 @@
 
 #include <Components/Target/Target.h>
 #include <Components/ComLink/IComLink.hpp>
+#include <Core/ExecutionTimer/PMUExecTimer.h>
 
 class Profiler
 {
 private:
+	PMUExecTimer timer;
 	Target* targetTask;
 public:
 	Profiler();
