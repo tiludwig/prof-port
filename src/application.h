@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <Core/Buffer/buffer.h>
 
+int numOfBlinks;
+
 void putc(char value)
 {
 	if (value == '?' || value == '#')
@@ -86,16 +88,21 @@ void appTask(void* pv)
 	extern int state[4];
 	while (1)
 	{
-		//receiver.waitForCommand();
-		//auto packet = receiver.getPacket();
-		//if (packet.id == 10)
+		receiver.waitForCommand();
+		numOfBlinks = 1;
+		auto packet = receiver.getPacket();
+		if (packet.id == 10)
 		{
 			receiver.sendOk(11);
+			numOfBlinks = 2;
 			uint32_t result = profiler.profile();
+
 
 			itoa(result, buf, 10);
 			send_msg(65, strlen(buf), buf);
+			numOfBlinks = 3;
 			send_msg(10, 4 * sizeof(int), (char*)state);
+			numOfBlinks = 4;
 		}
 	}
 }

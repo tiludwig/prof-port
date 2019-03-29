@@ -9,7 +9,7 @@
 #define TTTPROFCONFIG_H_
 
 /* Defines the maximum packet payload size */
-#define tttConfig_MAX_RECV_PACKET_SIZE		512
+#define tttConfig_MAX_RECV_PACKET_SIZE		1024
 
 #define tttConfig_PROF_TASK_FUNCTION		localizationTask
 #define tttConfig_PROF_TASK_NAME			"target"

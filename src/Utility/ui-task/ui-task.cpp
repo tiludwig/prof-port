@@ -11,6 +11,8 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
+extern int numOfBlinks;
+
 void uiTask(void* pv)
 {
 
@@ -23,11 +25,28 @@ void uiTask(void* pv)
 
 	GPIO_Init(GPIOC, &ioInit);
 
+
+
 	while (1)
 	{
-		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
-		vTaskDelay(100);
-		GPIO_SetBits(GPIOC, GPIO_Pin_13);
-		vTaskDelay(950);
+		portENTER_CRITICAL();
+		int tempNum = numOfBlinks;
+		portEXIT_CRITICAL();
+
+		int stillToDelay = 2000;
+
+		for (int i = 0; i < tempNum; i++)
+		{
+			GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+			vTaskDelay(100);
+			GPIO_SetBits(GPIOC, GPIO_Pin_13);
+			vTaskDelay(200);
+			stillToDelay -= 300;
+		}
+
+		if(stillToDelay <= 0)
+			continue;
+
+		vTaskDelay(stillToDelay);
 	}
 }
