@@ -156,10 +156,9 @@ packet_t PacketReceiver::getPacket()
 {
 	packet_t packet;
 	packet.id = receivedId;
-	packet.size = packetSize;
+	packet.size.value = packetSize;
 	packet.payload = receiveBuffer.getCurrentItemAddress();
-	receiveBuffer.skip(packet.size);
-	packet.checksum = 0;
+	receiveBuffer.skip(packet.size.value);
 
 	return packet;
 }

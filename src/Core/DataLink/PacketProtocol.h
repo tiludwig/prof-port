@@ -12,12 +12,14 @@
 #include <Core/Buffer/RingBuffer.h>
 #include <Core/DataLink/Packet.h>
 
+
 class PacketProtocol
 {
 private:
 	RingBuffer<char, tttConfig_MAX_RECV_PACKET_SIZE> receiveBuffer;
 	uint32_t bytesReceived;
 	bool isComplete;
+	int8_t runningSum;
 private:
 	bool isValueStartSymbol(char value);
 	bool isValueEscaped(char value);

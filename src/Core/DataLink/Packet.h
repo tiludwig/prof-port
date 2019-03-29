@@ -10,12 +10,21 @@
 
 #include <stdint.h>
 
+union packet_size_t
+{
+	uint16_t value;
+	struct
+	{
+		uint16_t lsb : 8;
+		uint16_t msb : 8;
+	} raw;
+};
+
 struct packet_t
 {
 	uint8_t id;
-	uint16_t size;
+	packet_size_t size;
 	char* payload;
-	int8_t checksum;
 };
 
 class Packet

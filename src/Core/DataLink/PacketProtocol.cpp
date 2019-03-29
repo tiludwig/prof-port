@@ -17,7 +17,6 @@ void PacketProtocol::process(char value)
 
 }
 
-
 bool PacketProtocol::isPacketComplete()
 {
 	return isComplete;
@@ -26,10 +25,12 @@ bool PacketProtocol::isPacketComplete()
 bool PacketProtocol::getPacket(packet_t& packet)
 {
 	packet.id = static_cast<uint8_t>(receiveBuffer.read());
-	packet.size = static_cast<uint8_t>(receiveBuffer.read());
-	packet.size |= (static_cast<uint16_t>(receiveBuffer.read()) << 8);
+	packet.size.raw.lsb = static_cast<uint8_t>(receiveBuffer.read());
+	packet.size.raw.msb = (receiveBuffer.read());
 	packet.payload = receiveBuffer.getCurrentItemAddress();
-	receiveBuffer.skip(packet.size);
-	packet.checksum = receiveBuffer.read();
+	receiveBuffer.skip(packet.size.value);
+	char checksum = receiveBuffer.read();
+	if(checksum != 0)
+		return false;
 	return true;
 }
