@@ -16,7 +16,7 @@
 #define BUFFER_SIZE		64
 #define BUFFER_MASK		(BUFFER_SIZE - 1)
 
-volatile char ringbuffer[64];
+volatile char ringbuffer[BUFFER_SIZE];
 volatile uint8_t head;
 volatile uint8_t tail;
 
@@ -114,7 +114,7 @@ bool SerialLink::initialize()
 	//USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 	//NVIC_EnableIRQ(USART1_IRQn);
 
-	xSemaphore = xSemaphoreCreateBinary();
+	xSemaphore = xSemaphoreCreateCounting(BUFFER_SIZE, 0);
 	return true;
 }
 
@@ -141,8 +141,4 @@ uint8_t SerialLink::read()
 		return rb_read();
 
 	return 0;
-	/*while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
-	 ;
-
-	 return USART1->DR;*/
 }
