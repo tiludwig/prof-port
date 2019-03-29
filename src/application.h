@@ -15,6 +15,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <Core/Buffer/buffer.h>
+#include <Core/Communicator/PacketCommunicator.h>
 
 int numOfBlinks;
 
@@ -81,33 +82,36 @@ void appTask(void* pv)
 	Profiler profiler;
 	profiler.setProfilingTarget(&target);
 
-	PacketReceiver receiver;
-	receiver.setLink(&link);
-	vTaskDelay(1233);
+	PacketCommunicator communicator(&link);
+	packet_t packetOk = {11, 2, (char*)"Ok"};
 
 	char buf[13];
 	extern int state[4];
 	while (1)
 	{
-		receiver.waitForCommand();
+		auto packet = communicator.waitForRequest();
 		numOfBlinks = 1;
-		auto packet = receiver.getPacket();
 		if (packet.id == 10)
 		{
-			//receiver.sendOk(11);
 			numOfBlinks = 2;
 			uint32_t result = profiler.profile();
 
-			itoa(result, buf, 10);
-			send_msg(65, strlen(buf), buf);
+			unsigned int buf[5];
+			buf[0] = result;
+			buf[1] = state[0];
+			buf[2] = state[1];
+			buf[3] = state[2];
+			buf[4] = state[3];
+			packet_t response = {65,5*sizeof(int), (char*)buf};
 			numOfBlinks = 3;
-			send_msg(10, 4 * sizeof(int), (char*)state);
+			communicator.sendResponse(response);
 			numOfBlinks = 4;
 		}
 		else if(packet.id == 20)
 		{
 			target.acceptPacket(packet);
-			receiver.sendOk(11);
+			communicator.sendResponse(packetOk);
+			numOfBlinks = 5;
 		}
 	}
 }
