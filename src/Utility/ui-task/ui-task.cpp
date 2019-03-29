@@ -33,14 +33,14 @@ void uiTask(void* pv)
 		int tempNum = numOfBlinks;
 		portEXIT_CRITICAL();
 
-		int stillToDelay = 2000;
+		int stillToDelay = 2500;
 
 		for (int i = 0; i < tempNum; i++)
 		{
 			GPIO_ResetBits(GPIOC, GPIO_Pin_13);
 			vTaskDelay(100);
 			GPIO_SetBits(GPIOC, GPIO_Pin_13);
-			vTaskDelay(200);
+			vTaskDelay(300);
 			stillToDelay -= 300;
 		}
 
