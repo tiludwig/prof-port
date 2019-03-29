@@ -20,6 +20,7 @@ private:
 	uint32_t overflowCount;
 	uint32_t peak;
 public:
+	RingBuffer();
 	void append(T value);
 	T read();
 	T peakRead();

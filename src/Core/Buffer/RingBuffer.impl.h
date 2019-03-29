@@ -7,6 +7,15 @@
 
 #include <Core/Buffer/RingBuffer.h>
 
+template <class T, uint32_t N>
+RingBuffer<T, N>::RingBuffer()
+{
+	head = 0;
+	tail = 0;
+	overflowCount = 0;
+	peak = 0;
+}
+
 template<class T, uint32_t N>
 void RingBuffer<T, N>::append(T value)
 {
