@@ -13,21 +13,44 @@
 #include <Core/DataLink/Packet.h>
 
 
+enum DataType_t
+{
+	VT_StartSymbol,
+	VT_EscapeSymbol,
+	VT_DefaultSymbol,
+};
+
+enum ReceiverState_t
+{
+	RS_WaitingForStart,
+	RS_ReceivingId,
+	RS_ReceivingSizeLSB,
+	RS_ReceivingSizeMSB,
+	RS_ReceivingPayload,
+	RS_ReceivingChecksum
+};
+
 class PacketProtocol
 {
 private:
 	RingBuffer<char, tttConfig_MAX_RECV_PACKET_SIZE> receiveBuffer;
-	uint32_t bytesReceived;
+	packet_t receivedPacket;
+	uint32_t bytesToReceive;
 	bool isComplete;
 	int8_t runningSum;
+	bool escapedSymbolFound;
+
+	ReceiverState_t state;
 private:
 	bool isValueStartSymbol(char value);
 	bool isValueEscaped(char value);
-
+	void processPacketContent(char value);
+	DataType_t checkForReservedSymbol(char value);
+	void reset();
 public:
 	PacketProtocol();
 
-	void process(char value);
+	void processByte(char value);
 	bool isPacketComplete();
 
 	bool getPacket(packet_t& packet);
