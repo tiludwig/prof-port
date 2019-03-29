@@ -60,6 +60,9 @@
 #define configUSE_16_BIT_TICKS		0
 #define configIDLE_SHOULD_YIELD		1
 
+#define configUSE_COUNTING_SEMAPHORES	1
+#define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
+
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES 		0
 #define configMAX_CO_ROUTINE_PRIORITIES ( 2 )
