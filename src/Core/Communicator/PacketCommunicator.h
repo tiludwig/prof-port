@@ -17,13 +17,13 @@ class PacketCommunicator
 {
 private:
 	IComLink* comDriver;
-	PacketReceiver* receiver;
+	PacketProtocol protocol;
 private:
 	void sendStartSymbol();
 	void send(char* buffer, uint16_t size);
 	void sendByte(char value);
 public:
-	PacketCommunicator(IComLink* link, PacketReceiver* recv);
+	PacketCommunicator(IComLink* link);
 
 	int8_t calculateChecksum(packet_t& packet);
 	void sendPacket(packet_t& packet);

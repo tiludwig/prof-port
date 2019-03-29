@@ -7,10 +7,9 @@
 
 #include <Core/Communicator/PacketCommunicator.h>
 
-PacketCommunicator::PacketCommunicator(IComLink* link, PacketReceiver* recv)
+PacketCommunicator::PacketCommunicator(IComLink* link)
 {
 	comDriver = link;
-	receiver = recv;
 }
 
 int8_t PacketCommunicator::calculateChecksum(packet_t& packet)
@@ -66,8 +65,13 @@ void PacketCommunicator::sendPacket(packet_t& packet)
 
 void PacketCommunicator::receivePacket(packet_t& packet)
 {
-	receiver->waitForCommand();
-	packet = receiver->getPacket();
+	while (!protocol.isPacketComplete())
+	{
+		auto receivedByte = comDriver->read();
+		protocol.processByte(receivedByte);
+	}
+
+	protocol.getPacket(packet);
 }
 
 packet_t PacketCommunicator::waitForRequest()
