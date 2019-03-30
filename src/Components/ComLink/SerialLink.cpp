@@ -58,10 +58,13 @@ char rb_read()
 
 extern "C" void USART1_IRQHandler(void)
 {
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
 	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
 	{
 		rb_push(USART_ReceiveData(USART1));
-		xSemaphoreGiveFromISR(xSemaphore, NULL);
+		xSemaphoreGiveFromISR(xSemaphore, &xHigherPriorityTaskWoken);
+		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 	}
 }
 
