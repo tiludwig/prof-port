@@ -8,6 +8,9 @@
 #ifndef COMPONENTS_TARGET_STATETARGET_STATE_PROPAGATOR_H_
 #define COMPONENTS_TARGET_STATETARGET_STATE_PROPAGATOR_H_
 
+extern volatile int state[4];
+extern volatile int accelerations[2];
+
 void localizationTask(void* pv);
 
 

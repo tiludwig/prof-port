@@ -11,5 +11,6 @@
 
 void uiTask(void* pv);
 
+void uiSignal(int blinks);
 
 #endif /* UTILITY_UI_TASK_H_ */

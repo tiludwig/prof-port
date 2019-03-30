@@ -99,15 +99,15 @@
 //extern TaskHandle_t xProfTask;
 
 #define traceTASK_SWITCHED_OUT()     \
-	extern TaskHandle_t xProfTask;	\
-     if( xProfTask == pxCurrentTCB ) \
+	extern TaskHandle_t xProfilingTask;	\
+     if( xProfilingTask == pxCurrentTCB ) \
      {                                \
          *((uint32_t*)0xE0001000) &= ~DWT_CTRL_CYCCNTENA;	\
      }
 
 #define traceTASK_SWITCHED_IN()      \
-		extern TaskHandle_t xProfTask;	\
-     if( xProfTask == pxCurrentTCB ) \
+		extern TaskHandle_t xProfilingTask;	\
+     if( xProfilingTask == pxCurrentTCB ) \
      {                                \
          *((uint32_t*)0xE0001000) |= DWT_CTRL_CYCCNTENA;	\
      }

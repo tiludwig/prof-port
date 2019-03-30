@@ -6,6 +6,7 @@
  */
 
 #include <Components/Target/StateTarget/StateTarget.h>
+#include <Core/Reader/PayloadReader.h>
 
 #include <FreeRTOS.h>
 #include <semphr.h>
@@ -58,5 +59,7 @@ void StateTarget::waitForCycleToEnd()
 
 void StateTarget::acceptPacket(packet_t& packet)
 {
-	memcpy((void*)accelerations, packet.payload, 2*sizeof(int));
+	PayloadReader reader(packet.payload);
+	accelerations[0] = reader.read<int>();
+	accelerations[1] = reader.read<int>();
 }

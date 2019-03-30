@@ -8,64 +8,31 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
-#include <Core/Profiler/Profiler.h>
-#include <Components/ComLink/SerialLink.h>
-#include <Components/Target/StateTarget/StateTarget.h>
-#include <Core/Buffer/buffer_t.h>
-#include <string.h>
-#include <stdlib.h>
-#include <Core/Communicator/PacketCommunicator.h>
-#include <stm32f10x_iwdg.h>
+#include <Core/Application/Application.h>
+#include <Utility/ui-task/ui-task.h>
 
-volatile int numOfBlinks;
+extern TaskHandle_t xProfilingTask;
 
 void appTask(void* pv)
 {
-	extern TaskHandle_t xProfTask;
-
 	SerialLink link;
-	link.initialize();
 
 	StateTarget target;
-	target.wrapTask(xProfTask);
-	target.initialize();
+	target.wrapTask(xProfilingTask);
 
-	Profiler profiler;
-	profiler.setProfilingTarget(&target);
+	Application app;
+	app.initialize(link, target);
 
-	PacketCommunicator communicator(&link);
-	packet_t packetOk = {11, 2, (char*)"Ok"};
+	uiSignal(1);
+	app.run();
 
-	char buf[13];
-	extern int state[4];
-	numOfBlinks = 1;
+	// We should never get here, but just in case
+
 	while (1)
 	{
-		auto packet = communicator.waitForRequest();
-		numOfBlinks = 2;
-		if (packet.id == 10)
-		{
-			uint32_t result = profiler.profile();
 
-			unsigned int buf[5];
-			buf[0] = result;
-			buf[1] = state[0];
-			buf[2] = state[1];
-			buf[3] = state[2];
-			buf[4] = state[3];
-			packet_t response = {65,5*sizeof(int), (char*)buf};
-			numOfBlinks = 3;
-			communicator.sendResponse(response);
-			numOfBlinks = 4;
-		}
-		else if(packet.id == 20)
-		{
-			target.acceptPacket(packet);
-			numOfBlinks = 5;
-			communicator.sendResponse(packetOk);
-			numOfBlinks = 6;
-		}
 	}
+
 }
 
 #endif /* APPLICATION_H_ */

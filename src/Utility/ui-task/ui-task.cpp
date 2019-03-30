@@ -11,7 +11,12 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-extern int numOfBlinks;
+static int numOfBlinks;
+
+void uiSignal(int blinks)
+{
+	numOfBlinks = blinks;
+}
 
 void uiTask(void* pv)
 {

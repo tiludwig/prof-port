@@ -27,12 +27,12 @@ void PMUExecTimer::initializeWithTask(TaskHandle_t target)
  */
 void PMUExecTimer::startMeasurement()
 {
-	extern TaskHandle_t xProfTask;
+	extern TaskHandle_t xProfilingTask;
 
 	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
 	//DWT->CTRL = DWT_CTRL_CYCCNTENA;
 
-	xProfTask = targetTask;
+	xProfilingTask = targetTask;
 	DWT->CYCCNT = 0;
 }
 
@@ -49,8 +49,8 @@ uint32_t PMUExecTimer::getElapsed()
  */
 void PMUExecTimer::stopMeasurement()
 {
-	extern TaskHandle_t xProfTask;
-	xProfTask = NULL;
+	extern TaskHandle_t xProfilingTask;
+	xProfilingTask = NULL;
 	DWT->CTRL &= ~DWT_CTRL_CYCCNTENA;
 	CoreDebug->DEMCR &= ~CoreDebug_DEMCR_TRCENA_Msk;
 }
