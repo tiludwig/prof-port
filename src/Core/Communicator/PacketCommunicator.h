@@ -24,6 +24,8 @@ private:
 public:
 	PacketCommunicator(IComLink* link);
 
+	void setComLink(IComLink* link);
+
 	int8_t calculateChecksum(packet_t& packet);
 	void sendPacket(packet_t& packet);
 	void receivePacket(packet_t& packet);

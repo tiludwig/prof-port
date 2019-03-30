@@ -12,6 +12,11 @@ PacketCommunicator::PacketCommunicator(IComLink* link)
 	comDriver = link;
 }
 
+void PacketCommunicator::setComLink(IComLink* link)
+{
+	comDriver = link;
+}
+
 int8_t PacketCommunicator::calculateChecksum(packet_t& packet)
 {
 	int8_t checksum = packet.id;
