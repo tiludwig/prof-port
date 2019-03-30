@@ -16,8 +16,8 @@
 #include <stdlib.h>
 #include <Core/Communicator/PacketCommunicator.h>
 #include <stm32f10x_iwdg.h>
+#include <Utility/ui-task/ui-task.h>
 
-volatile int numOfBlinks;
 
 void appTask(void* pv)
 {
@@ -30,6 +30,7 @@ void appTask(void* pv)
 	target.wrapTask(xProfTask);
 	target.initialize();
 
+	uiSignal(1);
 	Profiler profiler;
 	profiler.setProfilingTarget(&target);
 
@@ -38,11 +39,9 @@ void appTask(void* pv)
 
 	char buf[13];
 	extern int state[4];
-	numOfBlinks = 1;
 	while (1)
 	{
 		auto packet = communicator.waitForRequest();
-		numOfBlinks = 2;
 		if (packet.id == 10)
 		{
 			uint32_t result = profiler.profile();
@@ -54,16 +53,12 @@ void appTask(void* pv)
 			buf[3] = state[2];
 			buf[4] = state[3];
 			packet_t response = {65,5*sizeof(int), (char*)buf};
-			numOfBlinks = 3;
 			communicator.sendResponse(response);
-			numOfBlinks = 4;
 		}
 		else if(packet.id == 20)
 		{
 			target.acceptPacket(packet);
-			numOfBlinks = 5;
 			communicator.sendResponse(packetOk);
-			numOfBlinks = 6;
 		}
 	}
 }
