@@ -13,12 +13,12 @@
 #include <FreeRTOS.h>
 #include <semphr.h>
 
-#define BUFFER_SIZE		64
+#define BUFFER_SIZE		32
 #define BUFFER_MASK		(BUFFER_SIZE - 1)
 
 volatile char ringbuffer[BUFFER_SIZE];
-volatile uint8_t head;
-volatile uint8_t tail;
+volatile uint32_t head;
+volatile uint32_t tail;
 
 SemaphoreHandle_t xSemaphore = NULL;
 
@@ -27,7 +27,7 @@ bool rb_empty()
 	return (head == tail);
 }
 
-uint8_t rb_size()
+uint32_t rb_size()
 {
 	return (tail - head);
 }
@@ -43,7 +43,7 @@ void rb_push(char value)
 		return;
 
 	// compute index
-	uint8_t writeIndex = (tail++) & BUFFER_MASK;
+	uint32_t writeIndex = (tail++) & BUFFER_MASK;
 	ringbuffer[writeIndex] = value;
 }
 
@@ -52,7 +52,7 @@ char rb_read()
 	if (rb_empty())
 		return -1;
 
-	uint8_t readIndex = (head++) & BUFFER_MASK;
+	uint32_t readIndex = (head++) & BUFFER_MASK;
 	return ringbuffer[readIndex];
 }
 
@@ -114,8 +114,6 @@ bool SerialLink::initialize()
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
 	USART_Cmd(USART1, ENABLE);
-	//USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
-	//NVIC_EnableIRQ(USART1_IRQn);
 
 	xSemaphore = xSemaphoreCreateCounting(BUFFER_SIZE, 0);
 	return true;
@@ -140,7 +138,7 @@ void SerialLink::write(const uint8_t* data, uint32_t count)
  */
 uint8_t SerialLink::read()
 {
-	if(xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
+	if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
 		return rb_read();
 
 	return 0;
