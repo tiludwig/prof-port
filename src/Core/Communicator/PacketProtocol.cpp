@@ -57,7 +57,6 @@ void PacketProtocol::processByte(char value)
 		processPacketContent(value);
 		break;
 	}
-	shownumber(state);
 }
 
 void PacketProtocol::processPacketContent(char value)

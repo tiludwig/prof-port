@@ -33,27 +33,28 @@ void PacketCommunicator::sendStartSymbol()
 
 void PacketCommunicator::send(char* buffer, uint16_t size)
 {
+
 	for (uint16_t i = 0; i < size; i++)
 	{
 		sendByte(buffer[i]);
 	}
+
 }
 
 void PacketCommunicator::sendByte(char value)
 {
 	if (value == '?' || value == '#')
 	{
-		uint8_t stuff = '?';
-		comDriver->write(&stuff, 1);
+		comDriver->write((uint8_t*)"?", 1);
 		value = value ^ 0x20;
 	}
 	comDriver->write(reinterpret_cast<uint8_t*>(&value), 1);
+
 }
 
 void PacketCommunicator::sendPacket(packet_t& packet)
 {
 	int8_t checksum = calculateChecksum(packet);
-
 	sendStartSymbol();
 	sendByte(packet.id);
 	sendByte(packet.size.raw.lsb);

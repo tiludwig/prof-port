@@ -85,6 +85,8 @@ void shownumber(int num)
 
 int main()
 {
+
+	init();
 	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4);
 
 	xTaskCreate(uiTask, "ui", 128, NULL, 1, NULL);

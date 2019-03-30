@@ -15,11 +15,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <Core/Communicator/PacketCommunicator.h>
+#include <stm32f10x_iwdg.h>
 
-int numOfBlinks;
-
-
-extern void shownumber(int num);
+volatile int numOfBlinks;
 
 void appTask(void* pv)
 {
@@ -42,8 +40,7 @@ void appTask(void* pv)
 	extern int state[4];
 	numOfBlinks = 1;
 	while (1)
-
-	{numOfBlinks = 1;
+	{
 		auto packet = communicator.waitForRequest();
 		numOfBlinks = 2;
 		if (packet.id == 10)
@@ -57,12 +54,14 @@ void appTask(void* pv)
 			buf[3] = state[2];
 			buf[4] = state[3];
 			packet_t response = {65,5*sizeof(int), (char*)buf};
+			numOfBlinks = 3;
 			communicator.sendResponse(response);
 			numOfBlinks = 4;
 		}
 		else if(packet.id == 20)
 		{
 			target.acceptPacket(packet);
+			numOfBlinks = 5;
 			communicator.sendResponse(packetOk);
 			numOfBlinks = 6;
 		}
