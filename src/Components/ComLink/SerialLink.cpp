@@ -115,7 +115,7 @@ bool SerialLink::initialize()
 
 	USART_Cmd(USART1, ENABLE);
 
-	xSemaphore = xSemaphoreCreateCounting(BUFFER_SIZE, 0);
+	xSemaphore = xSemaphoreCreateBinary();
 	return true;
 }
 
@@ -138,8 +138,13 @@ void SerialLink::write(const uint8_t* data, uint32_t count)
  */
 uint8_t SerialLink::read()
 {
-	if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE)
-		return rb_read();
+	// check if data is available
+	if(rb_size() == 0)
+	{
+		// No - wait for data to become available
+		xSemaphoreTake(xSemaphore, portMAX_DELAY);
+	}
 
-	return 0;
+	// Data was available or has become available
+	return rb_read();
 }
