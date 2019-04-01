@@ -1,9 +1,13 @@
 #include "state_propagator.h"
 
+#include <math.h>
+
 #include <FreeRTOS.h>
 #include <semphr.h>
 
 SemaphoreHandle_t xProfSem = NULL;
+
+odometry_t predictorOdometryInput;
 
 volatile int state[4];
 volatile int accelerations[2];
@@ -29,18 +33,35 @@ void localizationTask(void* pv)
 		if (xSemaphoreTake(xProfSem, portMAX_DELAY) != pdTRUE)
 			continue;
 
-		if(state[0] >= 1000)
+		if (state[0] >= 1000)
+		{
 			state[0] = 0;
-		if(state[1] >= 1000)
+		}
+		if (state[1] >= 1000)
 		{
 			state[1] = 0;
 		}
 		// calculate measurement vector
 		int measurements[4];
-		measurements[0] = 5000*accelerations[0];
-		measurements[1] = 5000*accelerations[1];
-		measurements[2] = 100*accelerations[0];
-		measurements[3] = 100*accelerations[1];
+		int accel_x = 0;
+		int accel_y = 0;
+
+		if (predictorOdometryInput.type == UNIT_MM)
+		{
+			accel_x = predictorOdometryInput.acceleration[0];
+			accel_y = predictorOdometryInput.acceleration[1];
+		}
+		else
+		{
+			// convert to mm
+			accel_x = predictorOdometryInput.acceleration[0] * cos(predictorOdometryInput.acceleration[1]);
+			accel_y = predictorOdometryInput.acceleration[0] * sin(predictorOdometryInput.acceleration[1]);
+		}
+
+		measurements[0] = 5000 * accel_x;
+		measurements[1] = 5000 * accel_y;
+		measurements[2] = 100 * accel_x;
+		measurements[3] = 100 * accel_y;
 
 		// update the state variable
 		for (int row = 0; row < 4; row++)
