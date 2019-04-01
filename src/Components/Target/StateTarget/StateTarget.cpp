@@ -7,6 +7,7 @@
 
 #include <Components/Target/StateTarget/StateTarget.h>
 #include <Core/Reader/PayloadReader.h>
+#include "state_propagator.h"
 
 #include <FreeRTOS.h>
 #include <semphr.h>
@@ -34,10 +35,10 @@ void StateTarget::wrapTask(TaskHandle_t task)
 void StateTarget::initialize()
 {
 	extern SemaphoreHandle_t xProfSem;
-	if(xProfSem == NULL)
+	if (xProfSem == NULL)
 	{
 		xProfSem = xSemaphoreCreateBinary();
-		xSemaphoreTake(xProfSem, portMAX_DELAY);
+		//xSemaphoreTake(xProfSem, portMAX_DELAY);
 	}
 
 	accelerations[0] = 0;
@@ -60,6 +61,7 @@ void StateTarget::waitForCycleToEnd()
 void StateTarget::acceptPacket(packet_t& packet)
 {
 	PayloadReader reader(packet.payload);
-	accelerations[0] = reader.read<int>();
-	accelerations[1] = reader.read<int>();
+	predictorOdometryInput.type = static_cast<OdometryType_t> (reader.read<int>());
+	predictorOdometryInput.acceleration[0] = reader.read<int>();
+	predictorOdometryInput.acceleration[1] = reader.read<int>();
 }
