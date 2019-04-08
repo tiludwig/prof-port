@@ -51,11 +51,18 @@ packet_t Application::buildProfilingResultResponse(uint32_t profilingResult)
 
 void Application::processPacket(packet_t& packet)
 {
-	if (packet.id == tttConfig_COM_ID_PROFILER)
+	if (packet.id == tttConfig_COM_ID_APP)
 	{
 		uint32_t result = profiler.profile();
 		auto response = buildProfilingResultResponse(result);
 		communicator.sendResponse(response);
+	}
+	if (packet.id == tttConfig_COM_ID_PROFILER)
+	{
+		profiler.acceptPacket(packet);
+
+		packet_t packetOk = { 11, 2, (char*) "Ok" };
+		communicator.sendResponse(packetOk);
 	}
 	else if (packet.id == tttConfig_COM_ID_TARGET)
 	{
