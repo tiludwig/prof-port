@@ -22,6 +22,8 @@ public:
 
 	template<class T>
 	T read();
+
+	void readString(char* buffer);
 };
 
 template<class T>
@@ -33,6 +35,8 @@ T PayloadReader::read()
 		unsigned char temp = static_cast<unsigned char>(data[index++]);
 		value = value | (static_cast<T>(temp) << 8 * i);
 	}
+
+	index += sizeof(value);
 	return value;
 }
 

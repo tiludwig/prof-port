@@ -18,3 +18,13 @@ PayloadReader::PayloadReader(char* data, uint32_t offset)
 	this->data = data;
 	index = offset;
 }
+
+void PayloadReader::readString(char* buffer)
+{
+	char* currentChar = &data[index];
+	while(*currentChar != '\0')
+	{
+		*buffer++ = *currentChar++;
+	}
+	*buffer = '\0';
+}
