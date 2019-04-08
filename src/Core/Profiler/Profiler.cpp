@@ -5,14 +5,13 @@
  *      Author: Tim
  */
 
-#include <string.h>
 #include <stm32f10x.h>
+#include <TTTProfConfig.h>
 #include <Core/ExecutionTimer/cm3_dwt.h>
 #include <Core/Profiler/Profiler.h>
 #include <Components/ComLink/SerialLink.h>
 #include <Core/ExecutionTimer/PMUExecTimer.h>
-
-
+#include <Core/Reader/PayloadReader.h>
 
 Profiler::Profiler()
 {
@@ -50,10 +49,13 @@ uint32_t Profiler::profile()
 	return time;
 }
 
-void Profiler::accept(IComLink* sender, uint8_t id)
+void Profiler::acceptPacket(packet_t& packet)
 {
-	char msg[] = "[Profiler] Received new command\n";
-	auto len = strlen(msg);
-	sender->write((uint8_t*) msg, len);
+	PayloadReader reader(packet.payload);
+	// extract taskname
+	char taskName[tttConfigMAX_TASK_NAME_LEN];
+	reader.readString(taskName);
+	// set taskname
+	targetTask->wrapTask(taskName);
 }
 

@@ -26,7 +26,7 @@ public:
 	void setProfilingTarget(Target* target);
 	uint32_t profile();
 
-	virtual void accept(IComLink* sender, uint8_t id);
+	void acceptPacket(packet_t& packet);
 };
 
 #endif /* CORE_PROFILER_PROFILER_H_ */

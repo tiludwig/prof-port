@@ -18,7 +18,7 @@ void appTask(void* pv)
 	SerialLink link;
 
 	StateTarget target;
-	target.wrapTask(xProfilingTask);
+	target.wrapTask("target");
 
 	Application app;
 	app.initialize(link, target);
