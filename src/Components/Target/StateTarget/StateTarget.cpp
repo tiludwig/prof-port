@@ -32,6 +32,11 @@ void StateTarget::wrapTask(TaskHandle_t task)
 	this->task = task;
 }
 
+void StateTarget::wrapTask(const char* taskname)
+{
+	this->task = xTaskGetHandle(taskname);
+}
+
 void StateTarget::initialize()
 {
 	extern SemaphoreHandle_t xProfSem;

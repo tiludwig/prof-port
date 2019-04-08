@@ -33,6 +33,13 @@ public:
 	virtual void wrapTask(TaskHandle_t task);
 
 	/*
+	 * Name:	wrapTask
+	 *
+	 * Purpose: Wraps the FreeRTOS task in a profilable task.
+	 */
+	virtual void wrapTask(const char* taskname);
+
+	/*
 	 * Name:	initialize
 	 *
 	 * Purpose: Initializes the state target. This is called by the profile
