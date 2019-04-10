@@ -60,7 +60,6 @@ void StateTarget::startProcessCycle()
 
 void StateTarget::waitForCycleToEnd()
 {
-	vTaskDelay(1);
 }
 
 void StateTarget::acceptPacket(packet_t& packet)
