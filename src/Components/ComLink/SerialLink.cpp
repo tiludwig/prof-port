@@ -96,7 +96,7 @@ bool SerialLink::initialize()
 	GPIO_Init(GPIOA, &gpioInit);
 
 	USART_InitTypeDef usartInit;
-	usartInit.USART_BaudRate = 119200;
+	usartInit.USART_BaudRate = 19200;
 	usartInit.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	usartInit.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
 	usartInit.USART_Parity = USART_Parity_No;
