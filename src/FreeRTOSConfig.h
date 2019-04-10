@@ -67,6 +67,8 @@
 #define configUSE_CO_ROUTINES 		0
 #define configMAX_CO_ROUTINE_PRIORITIES ( 2 )
 
+#define configCHECK_FOR_STACK_OVERFLOW 1
+
 /* Set the following definitions to 1 to include the API function, or zero
  to exclude the API function. */
 
@@ -120,6 +122,7 @@
 
 #define tracePMU_DISABLE()	\
 	*((uint32_t*)0xE0001000) &= ~DWT_CTRL_CYCCNTENA;	\
+
 
 //#define configGENERATE_RUN_TIME_STATS 	1
 //#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()	SetupRunTimeStatsTimer()
