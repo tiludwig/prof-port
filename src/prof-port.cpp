@@ -47,7 +47,7 @@ int main()
 	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4);
 
 	xTaskCreate(uiTask, "ui", 128, NULL, 2, NULL);
-	xTaskCreate(appTask, "perf-app", 512, NULL, 3, NULL);
+	xTaskCreate(appTask, "perf-app", 1024, NULL, 3, NULL);
 	xTaskCreate(tttConfig_PROF_TASK_FUNCTION, tttConfig_PROF_TASK_NAME, tttConfig_PROF_TASK_STACKSIZE, NULL, 4,
 			&xProfilingTask);
 	xTaskCreate(idleTask, "idle", 128, NULL, 1, NULL);
