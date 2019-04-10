@@ -36,7 +36,6 @@ T PayloadReader::read()
 		value = value | (static_cast<T>(temp) << 8 * i);
 	}
 
-	index += sizeof(value);
 	return value;
 }
 
