@@ -15,7 +15,7 @@
 /* The task to profile */
 #define tttConfig_PROF_TASK_FUNCTION		localizationTask
 #define tttConfig_PROF_TASK_NAME			"target"
-#define tttConfig_PROF_TASK_STACKSIZE		128
+#define tttConfig_PROF_TASK_STACKSIZE		1024
 
 /* Serial driver */
 #define tttConfig_SERIAL_TIMEOUT			portMAX_DELAY
