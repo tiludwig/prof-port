@@ -33,7 +33,7 @@ void doStateUpdate()
 		accel_x = predictorOdometryInput.acceleration[0];
 		accel_y = predictorOdometryInput.acceleration[1];
 	}
-	else
+	/*else
 	{
 		// get floating point numbers
 		//volatile float facc_r = *reinterpret_cast<volatile float*>(&predictorOdometryInput.acceleration[0]);
@@ -41,7 +41,7 @@ void doStateUpdate()
 		// convert to mm
 		accel_x = predictorOdometryInput.acceleration[0] * cos(predictorOdometryInput.acceleration[1]);
 		accel_y = predictorOdometryInput.acceleration[0] * sin(predictorOdometryInput.acceleration[1]);
-	}
+	}*/
 
 	measurements[0] = 5000 * accel_x;
 	measurements[1] = 5000 * accel_y;
