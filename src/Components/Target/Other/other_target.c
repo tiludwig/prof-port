@@ -70,6 +70,8 @@ int arrayAverage(int* array, int size)
 	return sum / size;
 }
 
+volatile int averageSensorValue;
+
 void run_task()
 {
 
@@ -79,7 +81,7 @@ void run_task()
 	//productMatrix(array1, array2, array3, m, n);
 	//transposeMatrix(array1, array3, m, n);
 	//matrixAdd(array1, array2, array3, m, n);
-	arrayAverage(sensorValues, 256);
+	averageSensorValue = arrayAverage(sensorValues, 256);
 }
 
 void targetTask(void* pv)
