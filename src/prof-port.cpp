@@ -37,6 +37,7 @@
 #include <Utility/ui-task/ui-task.h>
 #include <Utility/idle-task/idle-task.h>
 #include <Components/Target/StateTarget/state_propagator.h>
+#include <Components/Target/Other/other_target.h>
 
 #include <TTTProfConfig.h>
 
