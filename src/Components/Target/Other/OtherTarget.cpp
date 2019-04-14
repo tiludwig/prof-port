@@ -6,6 +6,7 @@
  */
 
 #include <Components/Target/Other/OtherTarget.h>
+#include <Components/Target/Other/other_target.h>
 
 #include <Core/Reader/PayloadReader.h>
 
@@ -55,4 +56,9 @@ void OtherTarget::waitForCycleToEnd()
 
 void OtherTarget::acceptPacket(packet_t& packet)
 {
+	PayloadReader reader(packet.payload);
+	for(int i = 0; i < 256; i++)
+	{
+		sensorValues[i] = reader.read<int32_t>();
+	}
 }
