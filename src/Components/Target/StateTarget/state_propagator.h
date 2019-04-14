@@ -14,7 +14,7 @@ extern volatile int accelerations[2];
 
 enum OdometryType_t
 {
-	UNIT_MM = 1,
+	UNIT_MM = 0,
 	UNIT_POLAR,
 };
 
