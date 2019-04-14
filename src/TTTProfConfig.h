@@ -9,7 +9,7 @@
 #define TTTPROFCONFIG_H_
 
 /* Defines the maximum packet payload size */
-#define tttConfig_MAX_RECV_PACKET_SIZE		128
+#define tttConfig_MAX_RECV_PACKET_SIZE		1024
 
 #define tttConfigMAX_TASK_NAME_LEN			16
 /* The task to profile */
