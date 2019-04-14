@@ -124,6 +124,22 @@
 	*((uint32_t*)0xE0001000) &= ~DWT_CTRL_CYCCNTENA;	\
 
 
+#define tracePAUSE_PROFILING() 									\
+	extern volatile uint32_t bProfilingPaused;					\
+	if((*((uint32_t*)0xE0001000) & DWT_CTRL_CYCCNTENA) != 0)	\
+	{															\
+		*((uint32_t*)0xE0001000) &= ~DWT_CTRL_CYCCNTENA;		\
+		bProfilingPaused = 1;									\
+	}
+
+#define traceRESUME_PROFILING() 								\
+	extern volatile uint32_t bProfilingPaused;					\
+	if(bProfilingPaused == 1)									\
+	{															\
+		bProfilingPaused = 0;									\
+		*((uint32_t*)0xE0001000) |= DWT_CTRL_CYCCNTENA;			\
+	}
+
 //#define configGENERATE_RUN_TIME_STATS 	1
 //#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()	SetupRunTimeStatsTimer()
 //#define portGET_RUN_TIME_COUNTER_VALUE()           	ulHighFrequencyTimerTicks

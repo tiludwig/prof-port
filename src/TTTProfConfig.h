@@ -13,8 +13,8 @@
 
 #define tttConfigMAX_TASK_NAME_LEN			16
 /* The task to profile */
-#define tttConfig_PROF_TASK_FUNCTION		localizationTask
-#define tttConfig_PROF_TASK_NAME			"target"
+#define tttConfig_PROF_TASK_FUNCTION		targetTask
+#define tttConfig_PROF_TASK_NAME			"otherTask"
 #define tttConfig_PROF_TASK_STACKSIZE		1024
 
 /* Serial driver */

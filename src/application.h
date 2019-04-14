@@ -10,6 +10,7 @@
 
 #include <Core/Application/Application.h>
 #include <Utility/ui-task/ui-task.h>
+#include <TTTProfConfig.h>
 
 extern TaskHandle_t xProfilingTask;
 
@@ -17,8 +18,8 @@ void appTask(void* pv)
 {
 	SerialLink link;
 
-	StateTarget target;
-	target.wrapTask("target");
+	OtherTarget target;
+	target.wrapTask(tttConfig_PROF_TASK_NAME);
 
 	Application app;
 	app.initialize(link, target);

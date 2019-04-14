@@ -15,6 +15,7 @@
 #include <Core/Communicator/PacketCommunicator.h>
 #include <Components/Target/StateTarget/StateTarget.h>
 #include <Components/Target/StateTarget/state_propagator.h>
+#include <Components/Target/Other/OtherTarget.h>
 #include <Components/ComLink/SerialLink.h>
 
 class Application
