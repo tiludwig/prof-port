@@ -8,6 +8,9 @@
 #ifndef COMPONENTS_TARGET_OTHER_TARGET_H_
 #define COMPONENTS_TARGET_OTHER_TARGET_H_
 
+#include <stdint.h>
+
+extern volatile int32_t sensorValues[256];
 
 extern "C" void targetTask(void* pv);
 
