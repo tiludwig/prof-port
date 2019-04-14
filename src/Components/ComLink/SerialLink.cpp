@@ -13,7 +13,7 @@
 #include <FreeRTOS.h>
 #include <semphr.h>
 
-#define BUFFER_SIZE		32
+#define BUFFER_SIZE		64
 #define BUFFER_MASK		(BUFFER_SIZE - 1)
 
 volatile char ringbuffer[BUFFER_SIZE];
