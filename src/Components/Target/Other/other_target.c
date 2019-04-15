@@ -62,12 +62,35 @@ void matrixAdd(int matrixA[][MAXCOLS], int matrixB[][MAXCOLS], int result[][MAXC
 int arrayAverage(int* array, int size)
 {
 	int sum = 0;
-	for(int i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 	{
 		sum += array[i];
 	}
 
 	return sum / size;
+}
+
+void bubblesort(volatile int* array, int size)
+{
+	int n = size;
+	do
+	{
+		int newn = 1;
+		for (int i=0; i<n-1; ++i)
+		{
+			int currentElement = array[i];
+			int nextElement = array[i+1];
+
+			if (currentElement > nextElement)
+			{
+				//array.swap(i, i+1)
+				array[i] = nextElement;
+				array[i+1] = currentElement;
+				newn = i+1;
+			} // ende if
+		} // ende for
+		n = newn;
+	}while (n > 1);
 }
 
 volatile int averageSensorValue;
