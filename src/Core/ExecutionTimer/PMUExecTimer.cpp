@@ -12,6 +12,8 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
+volatile uint32_t cycleCounter;
+
 PMUExecTimer::~PMUExecTimer()
 {
 }
@@ -34,6 +36,7 @@ void PMUExecTimer::startMeasurement()
 
 	xProfilingTask = targetTask;
 	DWT->CYCCNT = 0;
+	cycleCounter = 0;
 }
 
 /*

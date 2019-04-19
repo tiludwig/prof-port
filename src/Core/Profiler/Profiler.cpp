@@ -13,8 +13,8 @@
 #include <Core/ExecutionTimer/PMUExecTimer.h>
 #include <Core/Reader/PayloadReader.h>
 
-volatile uint32_t bProfilingPaused;
 
+volatile uint32_t bProfilingPaused;
 Profiler::Profiler()
 {
 

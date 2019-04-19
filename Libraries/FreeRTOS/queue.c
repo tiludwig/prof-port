@@ -1413,6 +1413,8 @@ Queue_t * const pxQueue = xQueue;
 
 BaseType_t xQueueSemaphoreTake( QueueHandle_t xQueue, TickType_t xTicksToWait )
 {
+	traceOS_FUNC_ENTRY();
+
 BaseType_t xEntryTimeSet = pdFALSE;
 TimeOut_t xTimeOut;
 Queue_t * const pxQueue = xQueue;
@@ -1491,6 +1493,7 @@ Queue_t * const pxQueue = xQueue;
 				}
 
 				taskEXIT_CRITICAL();
+				traceOS_FUNC_EXIT();
 				return pdPASS;
 			}
 			else
@@ -1510,6 +1513,7 @@ Queue_t * const pxQueue = xQueue;
 					(or the block time has expired) so exit now. */
 					taskEXIT_CRITICAL();
 					traceQUEUE_RECEIVE_FAILED( pxQueue );
+					traceOS_FUNC_EXIT();
 					return errQUEUE_EMPTY;
 				}
 				else if( xEntryTimeSet == pdFALSE )
@@ -1618,6 +1622,7 @@ Queue_t * const pxQueue = xQueue;
 				#endif /* configUSE_MUTEXES */
 
 				traceQUEUE_RECEIVE_FAILED( pxQueue );
+				traceOS_FUNC_EXIT();
 				return errQUEUE_EMPTY;
 			}
 			else
@@ -1626,6 +1631,7 @@ Queue_t * const pxQueue = xQueue;
 			}
 		}
 	} /*lint -restore */
+	traceOS_FUNC_EXIT();
 }
 /*-----------------------------------------------------------*/
 

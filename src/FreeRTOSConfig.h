@@ -140,6 +140,21 @@
 		*((uint32_t*)0xE0001000) |= DWT_CTRL_CYCCNTENA;			\
 	}
 
+#define traceOS_FUNC_ENTRY()									\
+	extern uint32_t cycleCounter;								\
+	if((*((uint32_t*)0xE0001000) & DWT_CTRL_CYCCNTENA) != 0)	\
+	{															\
+		*((uint32_t*)0xE0001000) &= ~DWT_CTRL_CYCCNTENA;		\
+		cycleCounter = *((uint32_t*)0xE0001004);				\
+	}
+
+#define traceOS_FUNC_EXIT()										\
+	extern uint32_t cycleCounter;								\
+	if((*((uint32_t*)0xE0001000) & DWT_CTRL_CYCCNTENA) != 0)	\
+	{															\
+		*((uint32_t*)0xE0001004) = cycleCounter;				\
+	}
+
 //#define configGENERATE_RUN_TIME_STATS 	1
 //#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()	SetupRunTimeStatsTimer()
 //#define portGET_RUN_TIME_COUNTER_VALUE()           	ulHighFrequencyTimerTicks
