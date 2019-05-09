@@ -57,13 +57,13 @@ void OtherTarget::waitForCycleToEnd()
 void OtherTarget::acceptPacket(packet_t& packet)
 {
 	PayloadReader reader(packet.payload);
-	/*for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
 			array2[i][j] = reader.read<int32_t>();
 		}
-	}*/
-	lengthInfo[0] = reader.read<int32_t>();
-	lengthInfo[1] = reader.read<int32_t>();
+	}
+	/*lengthInfo[0] = reader.read<int32_t>();
+	lengthInfo[1] = reader.read<int32_t>();*/
 }

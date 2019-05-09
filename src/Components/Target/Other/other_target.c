@@ -119,12 +119,12 @@ void swap(volatile int32_t* a, volatile int32_t* b)
 volatile float length;
 void run_task()
 {
-	length = getLength(lengthInfo[0], lengthInfo[1]);
+	//length = getLength(lengthInfo[0], lengthInfo[1]);
 
 	//swap(&array2[1][0], &array2[0][1]);
-	//int32_t array3[4][4];
+	int32_t array3[4][4];
 
-	//productMatrix(array1, array2, array3, m, n);
+	productMatrix(array1, array2, array3, 4, 4);
 	//transposeMatrix(array2, array3);
 	//matrixAdd(array1, array2, array3, m, n);
 	//averageSensorValue = arrayAverage(sensorValues, 256);
