@@ -11,19 +11,19 @@
 #include <string.h>
 #include <stdlib.h>
 #include <TTTProfConfig.h>
-#include <Core/Profiler/Profiler.h>
 #include <Core/Communicator/PacketCommunicator.h>
 #include <Components/Target/StateTarget/StateTarget.h>
 #include <Components/Target/StateTarget/state_propagator.h>
 #include <Components/Target/Other/OtherTarget.h>
 #include <Components/ComLink/SerialLink.h>
+#include <Core/Analyser/Analyser.h>
 
 class Application
 {
 private:
 	IComLink* link;
 	Target* target;
-	Profiler profiler;
+	Analyser profiler;
 	PacketCommunicator communicator;
 	unsigned int resultBuffer[5];
 private:

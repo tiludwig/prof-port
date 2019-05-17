@@ -5,21 +5,21 @@
  *      Author: Tim
  */
 
-#ifndef CORE_PROFILER_PROFILER_H_
-#define CORE_PROFILER_PROFILER_H_
+#ifndef CORE_ANALYSER_ANALYSER_H_
+#define CORE_ANALYSER_ANALYSER_H_
 
 #include <Components/Target/Target.h>
 #include <Components/ComLink/IComLink.hpp>
 #include <Core/ExecutionTimer/PMUExecTimer.h>
 
-class Profiler
+class Analyser
 {
 private:
 	PMUExecTimer timer;
 	Target* targetTask;
 public:
-	Profiler();
-	virtual ~Profiler();
+	Analyser();
+	virtual ~Analyser();
 
 	void initialize();
 
@@ -29,4 +29,4 @@ public:
 	void acceptPacket(packet_t& packet);
 };
 
-#endif /* CORE_PROFILER_PROFILER_H_ */
+#endif /* CORE_ANALYSER_ANALYSER_H_ */

@@ -8,35 +8,35 @@
 #include <stm32f10x.h>
 #include <TTTProfConfig.h>
 #include <Core/ExecutionTimer/cm3_dwt.h>
-#include <Core/Profiler/Profiler.h>
 #include <Components/ComLink/SerialLink.h>
+#include <Core/Analyser/Analyser.h>
 #include <Core/ExecutionTimer/PMUExecTimer.h>
 #include <Core/Reader/PayloadReader.h>
 
 
 volatile uint32_t bProfilingPaused;
-Profiler::Profiler()
+Analyser::Analyser()
 {
 
 }
 
-Profiler::~Profiler()
+Analyser::~Analyser()
 {
 
 }
 
-void Profiler::initialize()
+void Analyser::initialize()
 {
 
 }
 
-void Profiler::setProfilingTarget(Target* target)
+void Analyser::setProfilingTarget(Target* target)
 {
 	targetTask = target;
 	timer.initializeWithTask(targetTask->getTaskHandle());
 }
 
-uint32_t Profiler::profile()
+uint32_t Analyser::profile()
 {
 	timer.startMeasurement();
 	__asm__ __volatile__("":::"memory");
@@ -51,7 +51,7 @@ uint32_t Profiler::profile()
 	return time;
 }
 
-void Profiler::acceptPacket(packet_t& packet)
+void Analyser::acceptPacket(packet_t& packet)
 {
 	PayloadReader reader(packet.payload);
 	// extract taskname
