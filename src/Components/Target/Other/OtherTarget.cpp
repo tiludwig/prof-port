@@ -46,6 +46,10 @@ void OtherTarget::initialize()
 
 void OtherTarget::startProcessCycle()
 {
+	// set the task to profile
+	extern TaskHandle_t xProfilingTask;
+	xProfilingTask = this->task;
+
 	extern SemaphoreHandle_t xTargetSemaphore;
 
 	// Signal start to target
