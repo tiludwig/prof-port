@@ -105,14 +105,14 @@
 	extern TaskHandle_t xProfilingTask;	\
      if( xProfilingTask == pxCurrentTCB ) \
      {                                \
-         *((uint32_t*)0xE0001000) &= ~DWT_CTRL_CYCCNTENA;	\
+         *((volatile uint32_t*)0xE0001000) = 0;	\
      }
 
 #define traceTASK_SWITCHED_IN()      \
 		extern TaskHandle_t xProfilingTask;	\
      if( xProfilingTask == pxCurrentTCB ) \
      {                                \
-         *((uint32_t*)0xE0001000) |= DWT_CTRL_CYCCNTENA;	\
+         *((volatile uint32_t*)0xE0001000) = 0x403a0001;	\
      }
 
 #define tracePMU_ENABLE()	\
@@ -128,7 +128,7 @@
 	extern volatile uint32_t bProfilingPaused;					\
 	if((*((uint32_t*)0xE0001000) & DWT_CTRL_CYCCNTENA) != 0)	\
 	{															\
-		*((uint32_t*)0xE0001000) &= ~DWT_CTRL_CYCCNTENA;		\
+		*((uint32_t*)0xE0001000) = 0;							\
 		bProfilingPaused = 1;									\
 	}
 
@@ -137,14 +137,14 @@
 	if(bProfilingPaused == 1)									\
 	{															\
 		bProfilingPaused = 0;									\
-		*((uint32_t*)0xE0001000) |= DWT_CTRL_CYCCNTENA;			\
+		*((volatile uint32_t*)0xE0001000) = 0x403a0001;			\
 	}
 
 #define traceOS_FUNC_ENTRY()									\
 	extern uint32_t cycleCounter;								\
 	if((*((uint32_t*)0xE0001000) & DWT_CTRL_CYCCNTENA) != 0)	\
 	{															\
-		*((uint32_t*)0xE0001000) &= ~DWT_CTRL_CYCCNTENA;		\
+		*((uint32_t*)0xE0001000) = 0;							\
 		cycleCounter = *((uint32_t*)0xE0001004);				\
 	}
 

@@ -32,7 +32,7 @@ void PMUExecTimer::startMeasurement()
 	extern TaskHandle_t xProfilingTask;
 
 	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-	//DWT->CTRL = DWT_CTRL_CYCCNTENA;
+	//DWT->CTRL = ;
 
 	xProfilingTask = targetTask;
 	DWT->CYCCNT = 0;
@@ -44,7 +44,7 @@ void PMUExecTimer::startMeasurement()
  */
 uint32_t PMUExecTimer::getElapsed()
 {
-	return DWT->CYCCNT;
+	return (DWT->CYCCNT - DWT->CPICNT - DWT->EXCCNT - DWT->SLEEPCNT - DWT->LSUCNT + DWT->FOLDCNT);
 }
 
 /*
