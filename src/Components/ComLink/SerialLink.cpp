@@ -11,7 +11,7 @@
 #include <stm32f10x_gpio.h>
 #include <stm32f10x_usart.h>
 #include <FreeRTOS.h>
-#include <semphr.h>
+#include <task.h>
 
 #define BUFFER_SIZE		64
 #define BUFFER_MASK		(BUFFER_SIZE - 1)
@@ -19,8 +19,6 @@
 volatile char ringbuffer[BUFFER_SIZE];
 volatile uint32_t head;
 volatile uint32_t tail;
-
-SemaphoreHandle_t xSemaphore = NULL;
 
 bool rb_empty()
 {
@@ -56,15 +54,18 @@ char rb_read()
 	return ringbuffer[readIndex];
 }
 
+void rb_init()
+{
+	head = 0;
+	tail = 0;
+}
+
 extern "C" void USART1_IRQHandler(void)
 {
-	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
 	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
 	{
 		rb_push(USART_ReceiveData(USART1));
-		xSemaphoreGiveFromISR(xSemaphore, &xHigherPriorityTaskWoken);
-		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 	}
 }
 
@@ -96,7 +97,7 @@ bool SerialLink::initialize()
 	GPIO_Init(GPIOA, &gpioInit);
 
 	USART_InitTypeDef usartInit;
-	usartInit.USART_BaudRate = 19200;
+	usartInit.USART_BaudRate = 921600;
 	usartInit.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	usartInit.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
 	usartInit.USART_Parity = USART_Parity_No;
@@ -114,8 +115,7 @@ bool SerialLink::initialize()
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
 	USART_Cmd(USART1, ENABLE);
-
-	xSemaphore = xSemaphoreCreateBinary();
+	rb_init();
 	return true;
 }
 
@@ -139,10 +139,11 @@ void SerialLink::write(const uint8_t* data, uint32_t count)
 uint8_t SerialLink::read()
 {
 	// check if data is available
-	if(rb_size() == 0)
+	while(rb_size() <= 0)
 	{
-		// No - wait for data to become available
-		xSemaphoreTake(xSemaphore, portMAX_DELAY);
+		// As long as there is no data available, we
+		// can continue to sleep.
+		// vTaskDelay(50);
 	}
 
 	// Data was available or has become available

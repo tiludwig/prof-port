@@ -25,6 +25,8 @@ void appTask(void* pv)
 	app.initialize(link, target);
 
 	uiSignal(1);
+
+	vTaskDelay(1000);
 	app.run();
 
 	// We should never get here, but just in case
