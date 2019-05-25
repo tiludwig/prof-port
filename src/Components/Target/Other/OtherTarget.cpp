@@ -5,9 +5,8 @@
  *      Author: Tim
  */
 
-#include <Components/Target/Other/OtherTarget.h>
 #include <Components/Target/Other/other_target.h>
-
+#include <Components/Target/Other/OtherTarget.h>
 #include <Core/Reader/PayloadReader.h>
 
 #include <FreeRTOS.h>
@@ -16,39 +15,34 @@
 
 extern int32_t unsorted_array[32];
 
-OtherTarget::~OtherTarget()
-{
+OtherTarget::~OtherTarget() {
 }
 
-TaskHandle_t OtherTarget::getTaskHandle()
-{
-	return task;
+TaskHandle_t OtherTarget::getTaskHandle() {
+	return taskHandle;
 }
 
-void OtherTarget::wrapTask(TaskHandle_t task)
+const char* OtherTarget::getName()
 {
-	this->task = task;
+	return this->taskName;
 }
 
-void OtherTarget::wrapTask(const char* taskname)
-{
-	this->task = xTaskGetHandle(taskname);
+void OtherTarget::wrapTask(const char* taskname) {
+	this->taskName = taskname;
+	this->taskHandle = xTaskGetHandle(taskname);
 }
 
-void OtherTarget::initialize()
-{
+void OtherTarget::initialize() {
 	extern SemaphoreHandle_t xTargetSemaphore;
-	if (xTargetSemaphore == NULL)
-	{
+	if (xTargetSemaphore == NULL) {
 		xTargetSemaphore = xSemaphoreCreateBinary();
 	}
 }
 
-void OtherTarget::startProcessCycle()
-{
+void OtherTarget::startProcessCycle() {
 	// set the task to profile
 	extern TaskHandle_t xProfilingTask;
-	xProfilingTask = this->task;
+	xProfilingTask = this->taskHandle;
 
 	extern SemaphoreHandle_t xTargetSemaphore;
 
@@ -56,24 +50,20 @@ void OtherTarget::startProcessCycle()
 	xSemaphoreGive(xTargetSemaphore);
 }
 
-void OtherTarget::waitForCycleToEnd()
-{
+void OtherTarget::waitForCycleToEnd() {
 }
 
-void OtherTarget::acceptPacket(packet_t& packet)
-{
+void OtherTarget::acceptPacket(packet_t& packet) {
 	PayloadReader reader(packet.payload);
-	for (int i = 0; i < 32; i++)
-	{
-		unsorted_array[i] = reader.read<int32_t>();
-	}
-	/*for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 32; i++)
 	 {
-	 for (int j = 0; j < 4; j++)
-	 {
-	 array2[i][j] = reader.read<int32_t>();
-	 }
+	 unsorted_array[i] = reader.read<int32_t>();
 	 }*/
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			array2[i][j] = reader.read<int32_t>();
+		}
+	}
 	/*lengthInfo[0] = reader.read<int32_t>();
 	 lengthInfo[1] = reader.read<int32_t>();*/
 }

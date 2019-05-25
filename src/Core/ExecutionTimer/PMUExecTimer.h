@@ -27,7 +27,7 @@ private:
 public:
 	virtual ~PMUExecTimer();
 
-	void initializeWithTask(TaskHandle_t target);
+	virtual void initialize(const char*);
 
 	/*
 	 * Name:	startMeasurement

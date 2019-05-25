@@ -8,10 +8,10 @@
 #ifndef COMPONENTS_TARGET_STATETARGET_STATETARGET_H_
 #define COMPONENTS_TARGET_STATETARGET_STATETARGET_H_
 
-#include "../Target.h"
-#include <Components/ComLink/IComLink.hpp>
+#include <Components/driver/communication/CommunicationDriver.hpp>
+#include <Components/Target/TargetWrapper.h>
 
-class StateTarget: public Target
+class StateTarget: public TargetWrapper
 {
 private:
 	TaskHandle_t task;

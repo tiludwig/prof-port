@@ -26,11 +26,11 @@
  * 				by Commandable. Commandable provides a static buffer of configurable
  * 				size.
  */
-class Target
+class TargetWrapper
 {
 public:
 
-	virtual ~Target()
+	virtual ~TargetWrapper()
 	{
 	}
 
@@ -41,12 +41,7 @@ public:
 	 */
 	virtual TaskHandle_t getTaskHandle() = 0;
 
-	/*
-	 * Name:	wrapTask
-	 *
-	 * Purpose: Wraps the FreeRTOS task in a profilable task.
-	 */
-	virtual void wrapTask(TaskHandle_t task) = 0;
+	virtual const char* getName() = 0;
 
 	/*
 	 * Name:	wrapTask

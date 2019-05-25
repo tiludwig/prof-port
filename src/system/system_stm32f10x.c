@@ -1017,7 +1017,7 @@ static void SetSysClockTo72(void)
   if (HSEStatus == (uint32_t)0x01)
   {
     /* Enable Prefetch Buffer */
-    FLASH->ACR |= FLASH_ACR_PRFTBE;
+    FLASH->ACR &= ~FLASH_ACR_PRFTBE;
 
     /* Flash 2 wait state */
     FLASH->ACR &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);

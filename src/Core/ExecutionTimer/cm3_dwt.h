@@ -23,8 +23,9 @@ struct DWT_TypeDef
 };
 
 #define DWT_BASE		((uint32_t)0xE0001000)
-#define DWT				((DWT_TypeDef *) DWT_BASE)
+#define DWT				((struct DWT_TypeDef *) DWT_BASE)
 
+#define DWT_CTRL_ALL		(DWT_CTRL_CYCCNTENA | DWT_CTRL_FOLDEVTENA | DWT_CTRL_LSUEVTENA | DWT_CTRL_SLEEPEVTENA | DWT_CTRL_EXCEVTENA | DWT_CTRL_CPIEVTENA)
 #define DWT_CTRL_CYCCNTENA	((uint32_t) 1U << 0)
 #define DWT_CTRL_FOLDEVTENA	((uint32_t) 1U << 21)
 #define DWT_CTRL_LSUEVTENA  ((uint32_t) 1U << 20)

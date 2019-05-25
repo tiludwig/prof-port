@@ -8,7 +8,7 @@
 #ifndef COMLINK_SERIALLINK_H_
 #define COMLINK_SERIALLINK_H_
 
-#include <Components/ComLink/IComLink.hpp>
+#include <Components/driver/communication/CommunicationDriver.hpp>
 #include <stdint.h>
 
 /*
@@ -16,10 +16,10 @@
  *
  * Purpose:	Implements the IComLink interface for communication over the serial line (UART).
  */
-class SerialLink: public IComLink
+class SerialDriver: public CommunicationDriver
 {
 public:
-	virtual ~SerialLink();
+	virtual ~SerialDriver();
 
 	/*
 	 * Name: 		initialize

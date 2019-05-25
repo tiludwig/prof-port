@@ -10,22 +10,31 @@
 
 #include <Core/Application/Application.h>
 #include <Utility/ui-task/ui-task.h>
+#include <Core/ExecutionTimer/PMUExecTimer.h>
 #include <TTTProfConfig.h>
 
 extern TaskHandle_t xProfilingTask;
 
 void appTask(void* pv)
 {
-	SerialLink link;
+	SerialDriver link;
 
 	OtherTarget target;
 	target.wrapTask(tttConfig_PROF_TASK_NAME);
 
-	Application app;
-	app.initialize(link, target);
+	PMUExecTimer timer;
+
+	ApplicationBuilder appBuilder;
+	appBuilder.withDriver(&link);
+	appBuilder.withTarget(&target);
+	appBuilder.withTimingMethod(&timer);
+	Application* app = appBuilder.build();
+	app->initialize();
 
 	uiSignal(1);
-	app.run();
+
+	vTaskDelay(1000);
+	app->run();
 
 	// We should never get here, but just in case
 

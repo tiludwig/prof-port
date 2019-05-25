@@ -8,32 +8,58 @@
 #ifndef CORE_APPLICATION_APPLICATION_H_
 #define CORE_APPLICATION_APPLICATION_H_
 
-#include <string.h>
+#include <Components/driver/communication/SerialDriver.h>
+#include <Components/Target/Other/OtherTarget.h>
 #include <stdlib.h>
 #include <TTTProfConfig.h>
 #include <Core/Communicator/PacketCommunicator.h>
-#include <Components/Target/StateTarget/StateTarget.h>
-#include <Components/Target/StateTarget/state_propagator.h>
-#include <Components/Target/Other/OtherTarget.h>
-#include <Components/ComLink/SerialLink.h>
 #include <Core/Analyser/Analyser.h>
+#include <Core/ExecutionTimer/ExecutionTimer.h>
 
-class Application
-{
+class ApplicationBuilder;
+
+class Application {
 private:
-	IComLink* link;
-	Target* target;
-	Analyser profiler;
+	friend class ApplicationBuilder;
+	CommunicationDriver* comdriver;
+	TargetWrapper* target;
+	Analyser analyser;
 	PacketCommunicator communicator;
-	unsigned int resultBuffer[5];
+	uint32_t profilingResult;
 private:
 	packet_t buildProfilingResultResponse(uint32_t profilingResult);
 	void processPacket(packet_t& packet);
-public:
 	Application();
-	void initialize(IComLink& comlink, Target& profTarget);
-	void run();
+public:
 
+	void initialize();
+	//void initialize(CommunicationDriver& comlink, TargetWrapper& profTarget);
+	void run();
+};
+
+class ApplicationBuilder {
+private:
+	Application app;
+public:
+	ApplicationBuilder& withDriver(CommunicationDriver* driver) {
+		app.comdriver = driver;
+		return *this;
+	}
+
+	ApplicationBuilder& withTarget(TargetWrapper* target) {
+		app.target = target;
+		return *this;
+	}
+
+	ApplicationBuilder& withTimingMethod(ExecutionTimer* timer) {
+		app.analyser.setTimingMethod(timer);
+		return *this;
+	}
+
+	Application* build()
+	{
+		return &app;
+	}
 };
 
 #endif /* CORE_APPLICATION_APPLICATION_H_ */

@@ -8,13 +8,14 @@
 #ifndef COMPONENTS_TARGET_OTHER_OTHERTARGET_H_
 #define COMPONENTS_TARGET_OTHER_OTHERTARGET_H_
 
-#include <Components/Target/Target.h>
-#include <Components/ComLink/IComLink.hpp>
+#include <Components/driver/communication/CommunicationDriver.hpp>
+#include <Components/Target/TargetWrapper.h>
 
-class OtherTarget: public Target
+class OtherTarget: public TargetWrapper
 {
 private:
-	TaskHandle_t task;
+	const char* taskName;
+	TaskHandle_t taskHandle;
 public:
 	virtual ~OtherTarget();
 
@@ -25,12 +26,7 @@ public:
 	 */
 	virtual TaskHandle_t getTaskHandle();
 
-	/*
-	 * Name:	wrapTask
-	 *
-	 * Purpose: Wraps the FreeRTOS task in a profilable task.
-	 */
-	virtual void wrapTask(TaskHandle_t task);
+	virtual const char* getName();
 
 	/*
 	 * Name:	wrapTask

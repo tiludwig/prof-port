@@ -18,10 +18,9 @@ PMUExecTimer::~PMUExecTimer()
 {
 }
 
-
-void PMUExecTimer::initializeWithTask(TaskHandle_t target)
+void PMUExecTimer::initialize(const char* taskname)
 {
-	targetTask = target;
+	targetTask = xTaskGetHandle(taskname);
 }
 
 /*
@@ -32,7 +31,7 @@ void PMUExecTimer::startMeasurement()
 	extern TaskHandle_t xProfilingTask;
 
 	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-	//DWT->CTRL = DWT_CTRL_CYCCNTENA;
+	//DWT->CTRL = ;
 
 	xProfilingTask = targetTask;
 	DWT->CYCCNT = 0;

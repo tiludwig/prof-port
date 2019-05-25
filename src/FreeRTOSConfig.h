@@ -67,7 +67,8 @@
 #define configUSE_CO_ROUTINES 		0
 #define configMAX_CO_ROUTINE_PRIORITIES ( 2 )
 
-#define configCHECK_FOR_STACK_OVERFLOW 1
+#define configCHECK_FOR_STACK_OVERFLOW 2
+#define configRECORD_STACK_HIGH_ADDRESS           1
 
 /* Set the following definitions to 1 to include the API function, or zero
  to exclude the API function. */
@@ -80,6 +81,7 @@
 #define INCLUDE_vTaskDelayUntil			0
 #define INCLUDE_vTaskDelay				1
 #define INCLUDE_xTaskGetHandle			1
+#define INCLUDE_xTaskGetCurrentTaskHandle	1
 
 /* This is the raw value as per the Cortex-M3 NVIC.  Values can be 255
  (lowest) to 0 (1?) (highest). */
@@ -105,14 +107,14 @@
 	extern TaskHandle_t xProfilingTask;	\
      if( xProfilingTask == pxCurrentTCB ) \
      {                                \
-         *((uint32_t*)0xE0001000) &= ~DWT_CTRL_CYCCNTENA;	\
+         *((volatile uint32_t*)0xE0001000) = 0;	\
      }
 
 #define traceTASK_SWITCHED_IN()      \
 		extern TaskHandle_t xProfilingTask;	\
      if( xProfilingTask == pxCurrentTCB ) \
      {                                \
-         *((uint32_t*)0xE0001000) |= DWT_CTRL_CYCCNTENA;	\
+         *((volatile uint32_t*)0xE0001000) = 0x403a0001;	\
      }
 
 #define tracePMU_ENABLE()	\
@@ -128,7 +130,7 @@
 	extern volatile uint32_t bProfilingPaused;					\
 	if((*((uint32_t*)0xE0001000) & DWT_CTRL_CYCCNTENA) != 0)	\
 	{															\
-		*((uint32_t*)0xE0001000) &= ~DWT_CTRL_CYCCNTENA;		\
+		*((uint32_t*)0xE0001000) = 0;							\
 		bProfilingPaused = 1;									\
 	}
 
@@ -137,14 +139,14 @@
 	if(bProfilingPaused == 1)									\
 	{															\
 		bProfilingPaused = 0;									\
-		*((uint32_t*)0xE0001000) |= DWT_CTRL_CYCCNTENA;			\
+		*((volatile uint32_t*)0xE0001000) = 0x403a0001;			\
 	}
 
 #define traceOS_FUNC_ENTRY()									\
 	extern uint32_t cycleCounter;								\
 	if((*((uint32_t*)0xE0001000) & DWT_CTRL_CYCCNTENA) != 0)	\
 	{															\
-		*((uint32_t*)0xE0001000) &= ~DWT_CTRL_CYCCNTENA;		\
+		*((uint32_t*)0xE0001000) = 0;							\
 		cycleCounter = *((uint32_t*)0xE0001004);				\
 	}
 

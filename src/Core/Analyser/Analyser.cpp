@@ -5,10 +5,10 @@
  *      Author: Tim
  */
 
+#include <Components/driver/communication/SerialDriver.h>
 #include <stm32f10x.h>
 #include <TTTProfConfig.h>
 #include <Core/ExecutionTimer/cm3_dwt.h>
-#include <Components/ComLink/SerialLink.h>
 #include <Core/Analyser/Analyser.h>
 #include <Core/ExecutionTimer/PMUExecTimer.h>
 #include <Core/Reader/PayloadReader.h>
@@ -30,23 +30,28 @@ void Analyser::initialize()
 
 }
 
-void Analyser::setProfilingTarget(Target* target)
+void Analyser::setTimingMethod(ExecutionTimer* timer)
+{
+	this->timer = timer;
+}
+
+void Analyser::setProfilingTarget(TargetWrapper* target)
 {
 	targetTask = target;
-	timer.initializeWithTask(targetTask->getTaskHandle());
+	timer->initialize(target->getName());//initializeWithTask(targetTask->getTaskHandle());
 }
 
 uint32_t Analyser::profile()
 {
-	timer.startMeasurement();
+	timer->startMeasurement();
 	__asm__ __volatile__("":::"memory");
 	targetTask->startProcessCycle();
 	targetTask->waitForCycleToEnd();
 	__asm__ __volatile__("":::"memory");
 	__DSB();
 
-	uint32_t time = timer.getElapsed() - 1;
-	timer.stopMeasurement();
+	uint32_t time = timer->getElapsed() - 1;
+	timer->stopMeasurement();
 	__asm__ __volatile__("":::"memory");
 	return time;
 }
