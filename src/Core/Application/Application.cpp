@@ -39,17 +39,13 @@ void Application::run() {
 	}
 }
 
-packet_t Application::buildProfilingResultResponse(uint32_t profilingResult) {
-	resultBuffer[0] = profilingResult;
-	resultBuffer[1] = state[0];
-	resultBuffer[2] = state[1];
-	resultBuffer[3] = state[2];
-	resultBuffer[4] = state[3];
+packet_t Application::buildProfilingResultResponse(uint32_t result) {
+	profilingResult = result;
 
 	packet_t packet;
 	packet.id = 65;
-	packet.size.value = 5 * sizeof(int);
-	packet.payload = (char*) resultBuffer;
+	packet.size.value = 1 * sizeof(uint32_t);
+	packet.payload = (char*) &profilingResult;
 	return packet;
 }
 
