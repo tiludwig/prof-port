@@ -19,17 +19,17 @@ OtherTarget::~OtherTarget() {
 }
 
 TaskHandle_t OtherTarget::getTaskHandle() {
-	return task;
+	return taskHandle;
 }
 
 const char* OtherTarget::getName()
 {
-	return this->name;
+	return this->taskName;
 }
 
 void OtherTarget::wrapTask(const char* taskname) {
-	this->name = taskname;
-	this->task = xTaskGetHandle(taskname);
+	this->taskName = taskname;
+	this->taskHandle = xTaskGetHandle(taskname);
 }
 
 void OtherTarget::initialize() {
@@ -42,7 +42,7 @@ void OtherTarget::initialize() {
 void OtherTarget::startProcessCycle() {
 	// set the task to profile
 	extern TaskHandle_t xProfilingTask;
-	xProfilingTask = this->task;
+	xProfilingTask = this->taskHandle;
 
 	extern SemaphoreHandle_t xTargetSemaphore;
 

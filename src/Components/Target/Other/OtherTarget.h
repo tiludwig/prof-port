@@ -14,8 +14,8 @@
 class OtherTarget: public TargetWrapper
 {
 private:
-	const char* name;
-	TaskHandle_t task;
+	const char* taskName;
+	TaskHandle_t taskHandle;
 public:
 	virtual ~OtherTarget();
 
