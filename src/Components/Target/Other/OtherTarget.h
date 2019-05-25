@@ -14,6 +14,7 @@
 class OtherTarget: public TargetWrapper
 {
 private:
+	const char* name;
 	TaskHandle_t task;
 public:
 	virtual ~OtherTarget();
@@ -25,12 +26,7 @@ public:
 	 */
 	virtual TaskHandle_t getTaskHandle();
 
-	/*
-	 * Name:	wrapTask
-	 *
-	 * Purpose: Wraps the FreeRTOS task in a profilable task.
-	 */
-	virtual void wrapTask(TaskHandle_t task);
+	virtual const char* getName();
 
 	/*
 	 * Name:	wrapTask

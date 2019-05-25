@@ -22,11 +22,13 @@ TaskHandle_t OtherTarget::getTaskHandle() {
 	return task;
 }
 
-void OtherTarget::wrapTask(TaskHandle_t task) {
-	this->task = task;
+const char* OtherTarget::getName()
+{
+	return this->name;
 }
 
 void OtherTarget::wrapTask(const char* taskname) {
+	this->name = taskname;
 	this->task = xTaskGetHandle(taskname);
 }
 
