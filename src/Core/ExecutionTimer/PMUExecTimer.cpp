@@ -44,7 +44,7 @@ void PMUExecTimer::startMeasurement()
  */
 uint32_t PMUExecTimer::getElapsed()
 {
-	return (DWT->CYCCNT - DWT->CPICNT - DWT->EXCCNT - DWT->SLEEPCNT - DWT->LSUCNT + DWT->FOLDCNT);
+	return DWT->CYCCNT;
 }
 
 /*
