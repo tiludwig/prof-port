@@ -67,7 +67,8 @@
 #define configUSE_CO_ROUTINES 		0
 #define configMAX_CO_ROUTINE_PRIORITIES ( 2 )
 
-#define configCHECK_FOR_STACK_OVERFLOW 1
+#define configCHECK_FOR_STACK_OVERFLOW 2
+#define configRECORD_STACK_HIGH_ADDRESS           1
 
 /* Set the following definitions to 1 to include the API function, or zero
  to exclude the API function. */
@@ -80,6 +81,7 @@
 #define INCLUDE_vTaskDelayUntil			0
 #define INCLUDE_vTaskDelay				1
 #define INCLUDE_xTaskGetHandle			1
+#define INCLUDE_xTaskGetCurrentTaskHandle	1
 
 /* This is the raw value as per the Cortex-M3 NVIC.  Values can be 255
  (lowest) to 0 (1?) (highest). */
