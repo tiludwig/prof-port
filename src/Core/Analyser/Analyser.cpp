@@ -30,23 +30,28 @@ void Analyser::initialize()
 
 }
 
+void Analyser::setTimingMethod(ExecutionTimer* timer)
+{
+	this->timer = timer;
+}
+
 void Analyser::setProfilingTarget(TargetWrapper* target)
 {
 	targetTask = target;
-	timer.initializeWithTask(targetTask->getTaskHandle());
+	timer->initialize(target->getName());//initializeWithTask(targetTask->getTaskHandle());
 }
 
 uint32_t Analyser::profile()
 {
-	timer.startMeasurement();
+	timer->startMeasurement();
 	__asm__ __volatile__("":::"memory");
 	targetTask->startProcessCycle();
 	targetTask->waitForCycleToEnd();
 	__asm__ __volatile__("":::"memory");
 	__DSB();
 
-	uint32_t time = timer.getElapsed() - 1;
-	timer.stopMeasurement();
+	uint32_t time = timer->getElapsed() - 1;
+	timer->stopMeasurement();
 	__asm__ __volatile__("":::"memory");
 	return time;
 }

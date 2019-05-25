@@ -11,11 +11,13 @@
 #include <Components/driver/communication/CommunicationDriver.hpp>
 #include <Components/Target/TargetWrapper.h>
 #include <Core/ExecutionTimer/PMUExecTimer.h>
+#include <Core/ExecutionTimer/ExecutionTimer.h>
 
 class Analyser
 {
 private:
-	PMUExecTimer timer;
+	//PMUExecTimer timer;
+	ExecutionTimer* timer;
 	TargetWrapper* targetTask;
 public:
 	Analyser();
@@ -23,6 +25,7 @@ public:
 
 	void initialize();
 
+	void setTimingMethod(ExecutionTimer* timer);
 	void setProfilingTarget(TargetWrapper* target);
 	uint32_t profile();
 
