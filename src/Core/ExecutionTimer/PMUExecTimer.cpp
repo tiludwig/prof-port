@@ -18,10 +18,9 @@ PMUExecTimer::~PMUExecTimer()
 {
 }
 
-
-void PMUExecTimer::initializeWithTask(TaskHandle_t target)
+void PMUExecTimer::initialize(const char* taskname)
 {
-	targetTask = target;
+	targetTask = xTaskGetHandle(taskname);
 }
 
 /*

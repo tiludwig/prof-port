@@ -24,6 +24,8 @@ class ExecutionTimer
 public:
 	virtual ~ExecutionTimer() {}
 
+	virtual void initialize(const char*) = 0;
+
 	/*
 	 * Name:	startMeasurement
 	 *
