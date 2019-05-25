@@ -10,6 +10,7 @@
 
 #include <Core/Application/Application.h>
 #include <Utility/ui-task/ui-task.h>
+#include <Core/ExecutionTimer/PMUExecTimer.h>
 #include <TTTProfConfig.h>
 
 extern TaskHandle_t xProfilingTask;

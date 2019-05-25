@@ -10,13 +10,11 @@
 
 #include <Components/driver/communication/CommunicationDriver.hpp>
 #include <Components/Target/TargetWrapper.h>
-#include <Core/ExecutionTimer/PMUExecTimer.h>
 #include <Core/ExecutionTimer/ExecutionTimer.h>
 
 class Analyser
 {
 private:
-	//PMUExecTimer timer;
 	ExecutionTimer* timer;
 	TargetWrapper* targetTask;
 public:
