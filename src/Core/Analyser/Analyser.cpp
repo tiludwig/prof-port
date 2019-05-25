@@ -30,7 +30,7 @@ void Analyser::initialize()
 
 }
 
-void Analyser::setProfilingTarget(Target* target)
+void Analyser::setProfilingTarget(TargetWrapper* target)
 {
 	targetTask = target;
 	timer.initializeWithTask(targetTask->getTaskHandle());

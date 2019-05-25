@@ -9,9 +9,9 @@
 #define COMPONENTS_TARGET_STATETARGET_STATETARGET_H_
 
 #include <Components/driver/communication/CommunicationDriver.hpp>
-#include "../Target.h"
+#include <Components/Target/TargetWrapper.h>
 
-class StateTarget: public Target
+class StateTarget: public TargetWrapper
 {
 private:
 	TaskHandle_t task;

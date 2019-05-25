@@ -9,20 +9,20 @@
 #define CORE_APPLICATION_APPLICATION_H_
 
 #include <Components/driver/communication/SerialDriver.h>
+#include <Components/Target/Other/OtherTarget.h>
 #include <string.h>
 #include <stdlib.h>
 #include <TTTProfConfig.h>
 #include <Core/Communicator/PacketCommunicator.h>
-#include <Components/Target/StateTarget/StateTarget.h>
 #include <Components/Target/StateTarget/state_propagator.h>
-#include <Components/Target/Other/OtherTarget.h>
+#include <Components/Target/StateTarget/StateTarget.h>
 #include <Core/Analyser/Analyser.h>
 
 class Application
 {
 private:
 	CommunicationDriver* link;
-	Target* target;
+	TargetWrapper* target;
 	Analyser profiler;
 	PacketCommunicator communicator;
 	unsigned int resultBuffer[5];
@@ -31,7 +31,7 @@ private:
 	void processPacket(packet_t& packet);
 public:
 	Application();
-	void initialize(CommunicationDriver& comlink, Target& profTarget);
+	void initialize(CommunicationDriver& comlink, TargetWrapper& profTarget);
 	void run();
 
 };

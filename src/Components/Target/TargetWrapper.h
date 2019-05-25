@@ -26,11 +26,11 @@
  * 				by Commandable. Commandable provides a static buffer of configurable
  * 				size.
  */
-class Target
+class TargetWrapper
 {
 public:
 
-	virtual ~Target()
+	virtual ~TargetWrapper()
 	{
 	}
 

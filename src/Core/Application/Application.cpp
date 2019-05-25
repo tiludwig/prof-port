@@ -14,7 +14,7 @@ Application::Application()
 	target = nullptr;
 }
 
-void Application::initialize(CommunicationDriver& comlink, Target& profTarget)
+void Application::initialize(CommunicationDriver& comlink, TargetWrapper& profTarget)
 {
 	this->link = &comlink;
 	this->target = &profTarget;

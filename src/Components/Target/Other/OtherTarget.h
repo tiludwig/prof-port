@@ -9,9 +9,9 @@
 #define COMPONENTS_TARGET_OTHER_OTHERTARGET_H_
 
 #include <Components/driver/communication/CommunicationDriver.hpp>
-#include <Components/Target/Target.h>
+#include <Components/Target/TargetWrapper.h>
 
-class OtherTarget: public Target
+class OtherTarget: public TargetWrapper
 {
 private:
 	TaskHandle_t task;

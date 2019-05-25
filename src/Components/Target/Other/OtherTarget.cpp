@@ -5,9 +5,8 @@
  *      Author: Tim
  */
 
-#include <Components/Target/Other/OtherTarget.h>
 #include <Components/Target/Other/other_target.h>
-
+#include <Components/Target/Other/OtherTarget.h>
 #include <Core/Reader/PayloadReader.h>
 
 #include <FreeRTOS.h>

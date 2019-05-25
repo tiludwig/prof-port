@@ -9,21 +9,21 @@
 #define CORE_ANALYSER_ANALYSER_H_
 
 #include <Components/driver/communication/CommunicationDriver.hpp>
-#include <Components/Target/Target.h>
+#include <Components/Target/TargetWrapper.h>
 #include <Core/ExecutionTimer/PMUExecTimer.h>
 
 class Analyser
 {
 private:
 	PMUExecTimer timer;
-	Target* targetTask;
+	TargetWrapper* targetTask;
 public:
 	Analyser();
 	virtual ~Analyser();
 
 	void initialize();
 
-	void setProfilingTarget(Target* target);
+	void setProfilingTarget(TargetWrapper* target);
 	uint32_t profile();
 
 	void acceptPacket(packet_t& packet);
