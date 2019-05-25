@@ -19,9 +19,11 @@
 #include <Core/Analyser/Analyser.h>
 #include <Core/ExecutionTimer/ExecutionTimer.h>
 
-class Application
-{
+class ApplicationBuilder;
+
+class Application {
 private:
+	friend class ApplicationBuilder;
 	CommunicationDriver* comdriver;
 	TargetWrapper* target;
 	Analyser analyser;
@@ -30,11 +32,37 @@ private:
 private:
 	packet_t buildProfilingResultResponse(uint32_t profilingResult);
 	void processPacket(packet_t& packet);
-public:
 	Application();
-	void initialize(CommunicationDriver& comlink, TargetWrapper& profTarget);
-	void run();
+public:
 
+	void initialize();
+	//void initialize(CommunicationDriver& comlink, TargetWrapper& profTarget);
+	void run();
+};
+
+class ApplicationBuilder {
+private:
+	Application app;
+public:
+	ApplicationBuilder& withDriver(CommunicationDriver* driver) {
+		app.comdriver = driver;
+		return *this;
+	}
+
+	ApplicationBuilder& withTarget(TargetWrapper* target) {
+		app.target = target;
+		return *this;
+	}
+
+	ApplicationBuilder& withTimingMethod(ExecutionTimer* timer) {
+		app.analyser.setTimingMethod(timer);
+		return *this;
+	}
+
+	Application* build()
+	{
+		return &app;
+	}
 };
 
 #endif /* CORE_APPLICATION_APPLICATION_H_ */

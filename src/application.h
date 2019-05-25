@@ -21,13 +21,19 @@ void appTask(void* pv)
 	OtherTarget target;
 	target.wrapTask(tttConfig_PROF_TASK_NAME);
 
-	Application app;
-	app.initialize(link, target);
+	PMUExecTimer timer;
+
+	ApplicationBuilder appBuilder;
+	appBuilder.withDriver(&link);
+	appBuilder.withTarget(&target);
+	appBuilder.withTimingMethod(&timer);
+	Application* app = appBuilder.build();
+	app->initialize();
 
 	uiSignal(1);
 
 	vTaskDelay(1000);
-	app.run();
+	app->run();
 
 	// We should never get here, but just in case
 
