@@ -20,23 +20,21 @@ volatile char ringbuffer[BUFFER_SIZE];
 volatile uint32_t head;
 volatile uint32_t tail;
 
-bool rb_empty()
-{
+TaskHandle_t driverTaskHandle;
+
+bool rb_empty() {
 	return (head == tail);
 }
 
-uint32_t rb_size()
-{
+uint32_t rb_size() {
 	return (tail - head);
 }
 
-bool rb_full()
-{
+bool rb_full() {
 	return (rb_size() == BUFFER_SIZE);
 }
 
-void rb_push(char value)
-{
+void rb_push(char value) {
 	if (rb_full())
 		return;
 
@@ -45,8 +43,7 @@ void rb_push(char value)
 	ringbuffer[writeIndex] = value;
 }
 
-char rb_read()
-{
+char rb_read() {
 	if (rb_empty())
 		return -1;
 
@@ -54,31 +51,39 @@ char rb_read()
 	return ringbuffer[readIndex];
 }
 
-void rb_init()
-{
+void rb_init() {
 	head = 0;
 	tail = 0;
 }
 
-extern "C" void USART1_IRQHandler(void)
-{
+extern "C" void USART1_IRQHandler(void) {
+	/* Check the reason for the interrupt. At the moment
+	 we don't care about other interrupt sources than the
+	 receive buffer full interrupt. */
+	if ((USART1->SR & USART_SR_RXNE) == 0)
+		return;
 
-	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
-	{
-		rb_push(USART_ReceiveData(USART1));
-	}
+	/* Read the received byte from the USART data register
+	 and push it into the circular buffer. The buffer will
+	 prevent data overwrite. */
+	uint8_t rxData = USART1->DR & 0x00FF;
+	rb_push(rxData);
+
+	/* Now notify the handling task, that a new byte was
+	 put into the buffer and can be processed. */
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	vTaskNotifyGiveFromISR(driverTaskHandle, &xHigherPriorityTaskWoken);
+	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
-SerialLink::~SerialLink()
-{
+SerialLink::~SerialLink() {
 
 }
 
 /*
  * Initializes the UART peripheral and its corresponding IO's
  */
-bool SerialLink::initialize()
-{
+bool SerialLink::initialize() {
 	RCC_APB2PeriphClockCmd(
 	RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO | RCC_APB2Periph_USART1, ENABLE);
 
@@ -116,16 +121,16 @@ bool SerialLink::initialize()
 
 	USART_Cmd(USART1, ENABLE);
 	rb_init();
+
+	driverTaskHandle = xTaskGetCurrentTaskHandle();
 	return true;
 }
 
 /*
  * write n bytes to the UART
  */
-void SerialLink::write(const uint8_t* data, uint32_t count)
-{
-	for (uint32_t i = 0; i < count; i++)
-	{
+void SerialLink::write(const uint8_t* data, uint32_t count) {
+	for (uint32_t i = 0; i < count; i++) {
 		USART_SendData(USART1, data[i]);
 
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
@@ -136,16 +141,28 @@ void SerialLink::write(const uint8_t* data, uint32_t count)
 /*
  * read a single byte from UART
  */
-uint8_t SerialLink::read()
-{
-	// check if data is available
-	while(rb_size() <= 0)
-	{
-		// As long as there is no data available, we
-		// can continue to sleep.
-		// vTaskDelay(50);
+uint8_t SerialLink::read() {
+	/* Check to see if there is data in the buffer. If so,
+	 we can immediately read from the buffer and do not have
+	 to wait for the interrupt to fire. In this case we also
+	 need to reset the notify flag from the IRQ. */
+	if (!rb_empty()) {
+		/* Reset the notify flag. We do read the buffer's
+		 content and if the flag is not reset, we will be
+		 able to read the buffer, if there is nothing
+		 inside (because the flag is still set. We don't block
+		 but just poll the notify value to clear it in any case. */
+		ulTaskNotifyTake(pdTRUE, 0);
+		return rb_read();
 	}
 
-	// Data was available or has become available
+	/* No data is in the buffer, so we have to wait for data
+	 to become available. Thus we will block until we get no-
+	 tified from the isr that new data is available. */
+	ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+	/* Once we reach this point, we were notified by the isr
+	 about new data being available. We can now read the buffer
+	 and return the data. */
 	return rb_read();
 }
