@@ -21,7 +21,7 @@
 class Application
 {
 private:
-	CommunicationDriver* link;
+	CommunicationDriver* comdriver;
 	TargetWrapper* target;
 	Analyser profiler;
 	PacketCommunicator communicator;

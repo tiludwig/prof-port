@@ -12,7 +12,7 @@ PacketCommunicator::PacketCommunicator(CommunicationDriver* link)
 	comDriver = link;
 }
 
-void PacketCommunicator::setComLink(CommunicationDriver* link)
+void PacketCommunicator::setDriver(CommunicationDriver* link)
 {
 	comDriver = link;
 }

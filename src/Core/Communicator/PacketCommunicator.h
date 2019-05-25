@@ -24,7 +24,7 @@ private:
 public:
 	PacketCommunicator(CommunicationDriver* link);
 
-	void setComLink(CommunicationDriver* link);
+	void setDriver(CommunicationDriver* link);
 
 	int8_t calculateChecksum(packet_t& packet);
 	void sendPacket(packet_t& packet);

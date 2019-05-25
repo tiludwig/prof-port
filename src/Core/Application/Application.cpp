@@ -10,19 +10,19 @@
 Application::Application()
 		: communicator(nullptr)
 {
-	link = nullptr;
+	comdriver = nullptr;
 	target = nullptr;
 }
 
 void Application::initialize(CommunicationDriver& comlink, TargetWrapper& profTarget)
 {
-	this->link = &comlink;
+	this->comdriver = &comlink;
 	this->target = &profTarget;
 
-	link->initialize();
+	comdriver->initialize();
 	target->initialize();
 	profiler.setProfilingTarget(target);
-	communicator.setComLink(link);
+	communicator.setDriver(comdriver);
 }
 
 void Application::run()
