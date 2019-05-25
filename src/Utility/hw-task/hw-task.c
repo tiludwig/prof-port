@@ -34,7 +34,7 @@ void hwTask(void* pv)
 	DMA_InitStructure.DMA_Priority = DMA_Priority_High;
 	DMA_Init(DMA1_Channel1, &DMA_InitStructure);
 
-	//DMA_Cmd(DMA1_Channel1, ENABLE);
+	DMA_Cmd(DMA1_Channel1, ENABLE);
 
 	RCC_ADCCLKConfig(RCC_PCLK2_Div6);
 
