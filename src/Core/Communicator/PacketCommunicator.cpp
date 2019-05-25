@@ -7,12 +7,12 @@
 
 #include <Core/Communicator/PacketCommunicator.h>
 
-PacketCommunicator::PacketCommunicator(IComLink* link)
+PacketCommunicator::PacketCommunicator(CommunicationDriver* link)
 {
 	comDriver = link;
 }
 
-void PacketCommunicator::setComLink(IComLink* link)
+void PacketCommunicator::setComLink(CommunicationDriver* link)
 {
 	comDriver = link;
 }

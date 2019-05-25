@@ -8,8 +8,8 @@
 #ifndef COMPONENTS_TARGET_OTHER_OTHERTARGET_H_
 #define COMPONENTS_TARGET_OTHER_OTHERTARGET_H_
 
+#include <Components/driver/communication/CommunicationDriver.hpp>
 #include <Components/Target/Target.h>
-#include <Components/ComLink/IComLink.hpp>
 
 class OtherTarget: public Target
 {

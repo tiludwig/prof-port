@@ -5,7 +5,7 @@
  *      Author: Tim
  */
 
-#include <Components/ComLink/SerialLink.h>
+#include <Components/driver/communication/SerialDriver.h>
 #include <stm32f10x.h>
 #include <stm32f10x_rcc.h>
 #include <stm32f10x_gpio.h>
@@ -76,14 +76,14 @@ extern "C" void USART1_IRQHandler(void) {
 	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
-SerialLink::~SerialLink() {
+SerialDriver::~SerialDriver() {
 
 }
 
 /*
  * Initializes the UART peripheral and its corresponding IO's
  */
-bool SerialLink::initialize() {
+bool SerialDriver::initialize() {
 	RCC_APB2PeriphClockCmd(
 	RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO | RCC_APB2Periph_USART1, ENABLE);
 
@@ -129,7 +129,7 @@ bool SerialLink::initialize() {
 /*
  * write n bytes to the UART
  */
-void SerialLink::write(const uint8_t* data, uint32_t count) {
+void SerialDriver::write(const uint8_t* data, uint32_t count) {
 	for (uint32_t i = 0; i < count; i++) {
 		USART_SendData(USART1, data[i]);
 
@@ -141,7 +141,7 @@ void SerialLink::write(const uint8_t* data, uint32_t count) {
 /*
  * read a single byte from UART
  */
-uint8_t SerialLink::read() {
+uint8_t SerialDriver::read() {
 	/* Check to see if there is data in the buffer. If so,
 	 we can immediately read from the buffer and do not have
 	 to wait for the interrupt to fire. In this case we also

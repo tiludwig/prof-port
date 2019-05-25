@@ -8,6 +8,7 @@
 #ifndef CORE_APPLICATION_APPLICATION_H_
 #define CORE_APPLICATION_APPLICATION_H_
 
+#include <Components/driver/communication/SerialDriver.h>
 #include <string.h>
 #include <stdlib.h>
 #include <TTTProfConfig.h>
@@ -15,13 +16,12 @@
 #include <Components/Target/StateTarget/StateTarget.h>
 #include <Components/Target/StateTarget/state_propagator.h>
 #include <Components/Target/Other/OtherTarget.h>
-#include <Components/ComLink/SerialLink.h>
 #include <Core/Analyser/Analyser.h>
 
 class Application
 {
 private:
-	IComLink* link;
+	CommunicationDriver* link;
 	Target* target;
 	Analyser profiler;
 	PacketCommunicator communicator;
@@ -31,7 +31,7 @@ private:
 	void processPacket(packet_t& packet);
 public:
 	Application();
-	void initialize(IComLink& comlink, Target& profTarget);
+	void initialize(CommunicationDriver& comlink, Target& profTarget);
 	void run();
 
 };

@@ -22,7 +22,7 @@
  * 			an arbitrary amount of bytes and receiving a single byte from the
  * 			communication interface for further processing.
  */
-class IComLink
+class CommunicationDriver
 {
 public:
 	/*

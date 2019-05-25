@@ -16,7 +16,7 @@ extern TaskHandle_t xProfilingTask;
 
 void appTask(void* pv)
 {
-	SerialLink link;
+	SerialDriver link;
 
 	OtherTarget target;
 	target.wrapTask(tttConfig_PROF_TASK_NAME);

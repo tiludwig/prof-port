@@ -8,23 +8,23 @@
 #ifndef CORE_COMMUNICATOR_PACKETCOMMUNICATOR_H_
 #define CORE_COMMUNICATOR_PACKETCOMMUNICATOR_H_
 
-#include <Components/ComLink/IComLink.hpp>
+#include <Components/driver/communication/CommunicationDriver.hpp>
 #include <Core/Communicator/PacketProtocol.h>
 #include <Core/Communicator/Packet.h>
 
 class PacketCommunicator
 {
 private:
-	IComLink* comDriver;
+	CommunicationDriver* comDriver;
 	PacketProtocol protocol;
 private:
 	void sendStartSymbol();
 	void send(char* buffer, uint16_t size);
 	void sendByte(char value);
 public:
-	PacketCommunicator(IComLink* link);
+	PacketCommunicator(CommunicationDriver* link);
 
-	void setComLink(IComLink* link);
+	void setComLink(CommunicationDriver* link);
 
 	int8_t calculateChecksum(packet_t& packet);
 	void sendPacket(packet_t& packet);

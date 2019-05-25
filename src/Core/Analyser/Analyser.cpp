@@ -5,10 +5,10 @@
  *      Author: Tim
  */
 
+#include <Components/driver/communication/SerialDriver.h>
 #include <stm32f10x.h>
 #include <TTTProfConfig.h>
 #include <Core/ExecutionTimer/cm3_dwt.h>
-#include <Components/ComLink/SerialLink.h>
 #include <Core/Analyser/Analyser.h>
 #include <Core/ExecutionTimer/PMUExecTimer.h>
 #include <Core/Reader/PayloadReader.h>

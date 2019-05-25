@@ -8,8 +8,8 @@
 #ifndef COMPONENTS_TARGET_STATETARGET_STATETARGET_H_
 #define COMPONENTS_TARGET_STATETARGET_STATETARGET_H_
 
+#include <Components/driver/communication/CommunicationDriver.hpp>
 #include "../Target.h"
-#include <Components/ComLink/IComLink.hpp>
 
 class StateTarget: public Target
 {

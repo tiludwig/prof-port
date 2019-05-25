@@ -8,8 +8,8 @@
 #ifndef CORE_ANALYSER_ANALYSER_H_
 #define CORE_ANALYSER_ANALYSER_H_
 
+#include <Components/driver/communication/CommunicationDriver.hpp>
 #include <Components/Target/Target.h>
-#include <Components/ComLink/IComLink.hpp>
 #include <Core/ExecutionTimer/PMUExecTimer.h>
 
 class Analyser
