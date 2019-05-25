@@ -21,7 +21,7 @@ void Application::initialize(CommunicationDriver& comlink, TargetWrapper& profTa
 
 	comdriver->initialize();
 	target->initialize();
-	profiler.setProfilingTarget(target);
+	analyser.setProfilingTarget(target);
 	communicator.setDriver(comdriver);
 }
 
@@ -53,13 +53,13 @@ void Application::processPacket(packet_t& packet)
 {
 	if (packet.id == tttConfig_COM_ID_APP)
 	{
-		uint32_t result = profiler.profile();
+		uint32_t result = analyser.profile();
 		auto response = buildProfilingResultResponse(result);
 		communicator.sendResponse(response);
 	}
 	if (packet.id == tttConfig_COM_ID_PROFILER)
 	{
-		profiler.acceptPacket(packet);
+		analyser.acceptPacket(packet);
 
 		packet_t packetOk = { 11, 2, (char*) "Ok" };
 		communicator.sendResponse(packetOk);

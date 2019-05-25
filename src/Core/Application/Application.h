@@ -17,13 +17,14 @@
 #include <Components/Target/StateTarget/state_propagator.h>
 #include <Components/Target/StateTarget/StateTarget.h>
 #include <Core/Analyser/Analyser.h>
+#include <Core/ExecutionTimer/ExecutionTimer.h>
 
 class Application
 {
 private:
 	CommunicationDriver* comdriver;
 	TargetWrapper* target;
-	Analyser profiler;
+	Analyser analyser;
 	PacketCommunicator communicator;
 	unsigned int resultBuffer[5];
 private:
