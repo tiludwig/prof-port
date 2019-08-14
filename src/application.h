@@ -9,7 +9,6 @@
 #define APPLICATION_H_
 
 #include <Core/Application/Application.h>
-#include <Utility/ui-task/ui-task.h>
 #include <Core/ExecutionTimer/PMUExecTimer.h>
 #include <TTTProfConfig.h>
 
@@ -17,6 +16,7 @@ extern TaskHandle_t xProfilingTask;
 
 void appTask(void* pv)
 {
+#if 0
 	SerialDriver link;
 
 	OtherTarget target;
@@ -37,7 +37,7 @@ void appTask(void* pv)
 	app->run();
 
 	// We should never get here, but just in case
-
+#endif
 	while (1)
 	{
 

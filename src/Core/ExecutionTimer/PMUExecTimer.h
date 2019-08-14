@@ -10,8 +10,10 @@
 
 #include "ExecutionTimer.h"
 
+#if defined(USE_FREERTOS)
 #include <FreeRTOS.h>
 #include <task.h>
+#endif
 
 /*
  * Name:	PMUExecTimer

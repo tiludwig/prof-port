@@ -30,36 +30,13 @@
 
 /* Includes */
 #include <application.h>
-#include <Utility/ui-task/ui-task.h>
-#include <Utility/idle-task/idle-task.h>
 #include <Components/Target/StateTarget/state_propagator.h>
 #include <Components/Target/Other/other_target.h>
-#include <Utility/hw-task/hw-task.h>
-
 #include <TTTProfConfig.h>
 
-#if 0
-TaskHandle_t xProfilingTask = NULL;
-
-extern "C" void vApplicationStackOverflowHook( TaskHandle_t xTask,
-                                    signed char *pcTaskName )
-{
-	asm volatile("nop");
-}
-#endif
 int main()
 {
-#if 0
-	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4);
 
-	xTaskCreate(uiTask, "ui", 128, NULL, 2, NULL);
-	xTaskCreate(hwTask, "hw-task", 128, NULL, 2, NULL);
-	xTaskCreate(appTask, "perf-app", 1024, NULL, 3, NULL);
-	xTaskCreate(tttConfig_PROF_TASK_FUNCTION, tttConfig_PROF_TASK_NAME, tttConfig_PROF_TASK_STACKSIZE, NULL, 4,
-			&xProfilingTask);
-	xTaskCreate(idleTask, "idle", 128, NULL, 1, NULL);
-	xPortStartScheduler();
-#endif
 	while (1)
 	{
 

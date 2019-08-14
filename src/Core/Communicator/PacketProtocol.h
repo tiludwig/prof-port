@@ -11,9 +11,6 @@
 #include <TTTProfConfig.h>
 #include <Core/Buffer/Buffer.h>
 #include <Core/Communicator/Packet.h>
-#include <stm32f10x_gpio.h>
-#include <stm32f10x.h>
-#include <stm32f10x_rcc.h>
 
 
 enum DataType_t

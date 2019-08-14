@@ -9,11 +9,9 @@
 #define TARGET_H_
 
 #include <stdint.h>
-
-#include <FreeRTOS.h>
-#include <task.h>
-
 #include <Core/Communicator/Packet.h>
+
+typedef uint32_t TaskHandle_t;
 
 /*
  * Name:		Target
