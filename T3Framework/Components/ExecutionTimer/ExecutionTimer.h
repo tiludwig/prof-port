@@ -32,7 +32,7 @@ public:
 	 * Arguments:	params Generic initialization parameters to the execution timer.
 	 * 					   This could be a pid/tid, a taskhandle, a taskname, etc.
 	 */
-	virtual void initialize(void* params) = 0;
+	virtual void initialize(const void* params) = 0;
 
 	/*
 	 * Name:	startMeasurement

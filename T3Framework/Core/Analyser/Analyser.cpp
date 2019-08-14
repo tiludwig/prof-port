@@ -5,12 +5,10 @@
  *      Author: Tim
  */
 
-#include <Core/Analyser/Analyser.h>
+#include "Analyser.h"
 #include <Core/Reader/PayloadReader.h>
 #include <TTTProfConfig.h>
 
-
-volatile uint32_t bProfilingPaused;
 Analyser::Analyser()
 {
 

@@ -17,11 +17,7 @@
 #define tttConfig_PROF_TASK_NAME			"otherTask"
 #define tttConfig_PROF_TASK_STACKSIZE		1024
 
-/* Serial driver */
-#define tttConfig_SERIAL_TIMEOUT			portMAX_DELAY
-
 /* Communication id's */
-
 #define tttConfig_COM_ID_APP				10
 #define tttConfig_COM_ID_TARGET				20
 #define tttConfig_COM_ID_PROFILER			30
