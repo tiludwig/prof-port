@@ -10,12 +10,10 @@
 
 #include <stdlib.h>
 
-#include <Components/ExecutionTimer/ExecutionTimer.h>
 #include <TTTProfConfig.h>
-#include <Components/driver/communication/SerialDriver.h>
-#include <Components/Target/Other/OtherTarget.h>
 #include <Core/Analyser/Analyser.h>
 #include <Core/Communicator/PacketCommunicator.h>
+#include <Components/ExecutionTimer/ExecutionTimer.h>
 
 class ApplicationBuilder;
 

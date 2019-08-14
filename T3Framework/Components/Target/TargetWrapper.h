@@ -9,43 +9,33 @@
 #define TARGET_H_
 
 #include <stdint.h>
-
-#include "../../../T3Framework/Core/Communicator/Packet.h"
-
-typedef uint32_t TaskHandle_t;
+#include <Core/Communicator/Packet.h>
 
 /*
  * Name:		Target
  *
  * Purpose: 	Provides an interface to be used when implementing new profiling
- * 				target applications. The profiling module will control the target
+ * 				target applications. The analyzer module will control the target
  * 				through this interface.
- *
- * Implements:	Must implement the ICommandable interface, which is implemented
- * 				by Commandable. Commandable provides a static buffer of configurable
- * 				size.
  */
 class TargetWrapper
 {
 public:
-
 	virtual ~TargetWrapper()
 	{
 	}
 
 	/*
-	 * Name:	getTaskHandle
+	 * Name:	getTaskName
 	 *
-	 * Purpose: Gets the FreeRTOS task handle of the wrapped task.
+	 * Purpose: Gets the name of the wrapped task
 	 */
-	virtual TaskHandle_t getTaskHandle() = 0;
-
-	virtual const char* getName() = 0;
+	virtual const char* getTaskName() = 0;
 
 	/*
 	 * Name:	wrapTask
 	 *
-	 * Purpose: Wraps the FreeRTOS task in a profilable task.
+	 * Purpose: Wraps the task to be profiled into a analyzable task
 	 */
 	virtual void wrapTask(const char* taskname) = 0;
 

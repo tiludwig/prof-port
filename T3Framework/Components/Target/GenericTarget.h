@@ -1,48 +1,39 @@
 /*
- * StateTarget.h
+ * Generic Target
  *
- *  Created on: 27.03.2019
- *      Author: Tim
+ * This file contains an empty implementation of the
+ * TargetWrapper interface with comments.
  */
 
-#ifndef COMPONENTS_TARGET_STATETARGET_STATETARGET_H_
-#define COMPONENTS_TARGET_STATETARGET_STATETARGET_H_
+#ifndef T3FRAMEWORK_COMPONENTS_TARGET_GENERICTARGET_H_
+#define T3FRAMEWORK_COMPONENTS_TARGET_GENERICTARGET_H_
 
-#include <Components/driver/communication/CommunicationDriver.hpp>
-#include <Components/Target/TargetWrapper.h>
+#include "TargetWrapper.h"
 
-class StateTarget: public TargetWrapper
-{
+class GenericTarget : public TargetWrapper {
 private:
-	TaskHandle_t task;
+	const char* taskName;
 public:
-	virtual ~StateTarget();
-
+	GenericTarget();
+	virtual ~GenericTarget();
 	/*
-	 * Name:	getTaskHandle
+	 * Name:	getTaskName
 	 *
-	 * Purpose: Gets the FreeRTOS task handle of the wrapped task.
+	 * Purpose: Gets the name of the wrapped task
 	 */
-	virtual TaskHandle_t getTaskHandle();
+	virtual const char* getTaskName();
 
 	/*
 	 * Name:	wrapTask
 	 *
-	 * Purpose: Wraps the FreeRTOS task in a profilable task.
-	 */
-	virtual void wrapTask(TaskHandle_t task);
-
-	/*
-	 * Name:	wrapTask
-	 *
-	 * Purpose: Wraps the FreeRTOS task in a profilable task.
+	 * Purpose: Wraps the task to be profiled into a analyzable task
 	 */
 	virtual void wrapTask(const char* taskname);
 
 	/*
 	 * Name:	initialize
 	 *
-	 * Purpose: Initializes the state target. This is called by the profile
+	 * Purpose: Initializes the target wrapper. This is called by the profile
 	 * 			prior to profiling to allow the target class to do some specific
 	 * 			initialization.
 	 */
@@ -76,4 +67,4 @@ public:
 	virtual void acceptPacket(packet_t& packet);
 };
 
-#endif /* COMPONENTS_TARGET_STATETARGET_STATETARGET_H_ */
+#endif /* T3FRAMEWORK_COMPONENTS_TARGET_GENERICTARGET_H_ */

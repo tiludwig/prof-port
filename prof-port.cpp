@@ -6,22 +6,18 @@
 #include <iostream>
 
 #include "T3Framework/framework.h"
+#include <Components/Target/GenericTarget.h>
 
 using namespace std;
 
 
 int main(int argc, char** argv) {
 
-	if(argc < 4) {
-		cout << "Usage: prof-port <driver> <target> <timing-method>" << endl;
-		return 0;
-	}
+	CommunicationDriver* driver = nullptr;
+	TargetWrapper* target = new GenericTarget();
+	ExecutionTimer* timingMethod = nullptr;
 
-
-
-
-
-	frameworkEntryPoint(nullptr, nullptr, nullptr);
+	frameworkEntryPoint(driver, target, timingMethod);
 
 
 	return 0;

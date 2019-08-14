@@ -34,7 +34,7 @@ void Analyser::setTimingMethod(ExecutionTimer* timer)
 void Analyser::setProfilingTarget(TargetWrapper* target)
 {
 	targetTask = target;
-	timer->initialize(target->getName());//initializeWithTask(targetTask->getTaskHandle());
+	timer->initialize(target->getTaskName());
 }
 
 uint32_t Analyser::profile()
