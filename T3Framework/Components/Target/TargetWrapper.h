@@ -9,7 +9,8 @@
 #define TARGET_H_
 
 #include <stdint.h>
-#include <Core/Communicator/Packet.h>
+
+#include "../../../T3Framework/Core/Communicator/Packet.h"
 
 typedef uint32_t TaskHandle_t;
 

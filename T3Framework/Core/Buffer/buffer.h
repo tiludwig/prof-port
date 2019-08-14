@@ -35,6 +35,6 @@ public:
 	T& operator[](uint32_t idx);
 };
 
-#include "Buffer.impl.h"
+#include "../../../T3Framework/Core/Buffer/Buffer.impl.h"
 
 #endif /* CORE_BUFFER_BUFFER_H_ */

@@ -10,7 +10,7 @@
 
 #include <Components/driver/communication/CommunicationDriver.hpp>
 #include <Components/Target/TargetWrapper.h>
-#include <Core/ExecutionTimer/ExecutionTimer.h>
+#include <Components/ExecutionTimer/ExecutionTimer.h>
 
 class Analyser
 {

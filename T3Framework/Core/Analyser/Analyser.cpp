@@ -5,11 +5,9 @@
  *      Author: Tim
  */
 
-#include <Components/driver/communication/SerialDriver.h>
-#include <TTTProfConfig.h>
 #include <Core/Analyser/Analyser.h>
-#include <Core/ExecutionTimer/PMUExecTimer.h>
 #include <Core/Reader/PayloadReader.h>
+#include <TTTProfConfig.h>
 
 
 volatile uint32_t bProfilingPaused;

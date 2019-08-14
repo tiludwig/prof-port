@@ -5,7 +5,7 @@
  *      Author: Tim
  */
 
-#include <Core/Communicator/PacketCommunicator.h>
+#include "../../../T3Framework/Core/Communicator/PacketCommunicator.h"
 
 PacketCommunicator::PacketCommunicator(CommunicationDriver* link)
 {

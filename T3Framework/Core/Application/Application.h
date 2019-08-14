@@ -8,13 +8,14 @@
 #ifndef CORE_APPLICATION_APPLICATION_H_
 #define CORE_APPLICATION_APPLICATION_H_
 
+#include <stdlib.h>
+
+#include <Components/ExecutionTimer/ExecutionTimer.h>
+#include <TTTProfConfig.h>
 #include <Components/driver/communication/SerialDriver.h>
 #include <Components/Target/Other/OtherTarget.h>
-#include <stdlib.h>
-#include <TTTProfConfig.h>
-#include <Core/Communicator/PacketCommunicator.h>
 #include <Core/Analyser/Analyser.h>
-#include <Core/ExecutionTimer/ExecutionTimer.h>
+#include <Core/Communicator/PacketCommunicator.h>
 
 class ApplicationBuilder;
 

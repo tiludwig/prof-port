@@ -8,8 +8,9 @@
 #ifndef COMLINK_SERIALLINK_H_
 #define COMLINK_SERIALLINK_H_
 
-#include <Components/driver/communication/CommunicationDriver.hpp>
 #include <stdint.h>
+
+#include "../../../../T3Framework/Components/driver/communication/CommunicationDriver.hpp"
 
 /*
  * Name: 	SerialLink

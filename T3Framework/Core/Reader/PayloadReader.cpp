@@ -5,7 +5,7 @@
  *      Author: Tim
  */
 
-#include <Core/Reader/PayloadReader.h>
+#include "../../../T3Framework/Core/Reader/PayloadReader.h"
 
 PayloadReader::PayloadReader(char* data)
 {

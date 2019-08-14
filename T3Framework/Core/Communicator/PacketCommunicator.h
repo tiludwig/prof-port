@@ -9,8 +9,8 @@
 #define CORE_COMMUNICATOR_PACKETCOMMUNICATOR_H_
 
 #include <Components/driver/communication/CommunicationDriver.hpp>
-#include <Core/Communicator/PacketProtocol.h>
-#include <Core/Communicator/Packet.h>
+#include "Packet.h"
+#include "PacketProtocol.h"
 
 class PacketCommunicator
 {

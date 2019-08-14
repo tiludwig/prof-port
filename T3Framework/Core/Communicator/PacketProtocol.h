@@ -8,9 +8,9 @@
 #ifndef CORE_DATALINK_PACKETPROTOCOL_H_
 #define CORE_DATALINK_PACKETPROTOCOL_H_
 
-#include <TTTProfConfig.h>
 #include <Core/Buffer/Buffer.h>
-#include <Core/Communicator/Packet.h>
+#include <TTTProfConfig.h>
+#include "Packet.h"
 
 
 enum DataType_t

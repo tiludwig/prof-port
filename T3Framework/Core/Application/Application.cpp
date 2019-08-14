@@ -5,7 +5,7 @@
  *      Author: Tim
  */
 
-#include <Core/Application/Application.h>
+#include "../../../T3Framework/Core/Application/Application.h"
 
 Application::Application() :
 		communicator(nullptr) {
