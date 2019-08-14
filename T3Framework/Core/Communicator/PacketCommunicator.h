@@ -8,7 +8,7 @@
 #ifndef CORE_COMMUNICATOR_PACKETCOMMUNICATOR_H_
 #define CORE_COMMUNICATOR_PACKETCOMMUNICATOR_H_
 
-#include <Components/driver/communication/CommunicationDriver.hpp>
+#include <Components/Driver/Communication/CommunicationDriver.hpp>
 #include "Packet.h"
 #include "PacketProtocol.h"
 

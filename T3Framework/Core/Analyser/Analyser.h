@@ -8,7 +8,7 @@
 #ifndef CORE_ANALYSER_ANALYSER_H_
 #define CORE_ANALYSER_ANALYSER_H_
 
-#include <Components/driver/communication/CommunicationDriver.hpp>
+#include <Components/Driver/Communication/CommunicationDriver.hpp>
 #include <Components/Target/TargetWrapper.h>
 #include <Components/ExecutionTimer/ExecutionTimer.h>
 
