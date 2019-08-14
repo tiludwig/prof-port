@@ -1,34 +1,31 @@
 /*
- * IComLink.hpp
+ * CommunicationDriver.hpp
  *
  *  Created on: 19.03.2019
  *      Author: Tim
  */
 
-#ifndef COMLINK_ICOMLINK_HPP_
-#define COMLINK_ICOMLINK_HPP_
+#ifndef COMPONENTS_COMMUNICATIONDRIVER_HPP_
+#define COMPONENTS_COMMUNICATIONDRIVER_HPP_
 
 #include <stdint.h>
 
 /*
- * Name: 	IComLink
+ * Name: 	Communication driver
  *
- * Purpose:	Provides a well-defined interface for the host communication module.
- *
- * 			The 'initialize' method should be used to initialize the comm driver
- * 			being used (or the comm peripheral in bare-metal applications).
- *
- * 			The two methods 'write' and 'read' should provide a mean for sending
- * 			an arbitrary amount of bytes and receiving a single byte from the
- * 			communication interface for further processing.
+ * Purpose:	Provides an interface for the host communication module.
  */
 class CommunicationDriver
 {
 public:
+	virtual ~CommunicationDriver()
+	{
+	}
+
 	/*
 	 * Name: 		initialize
 	 *
-	 * Purpose: 	Initializes the comm driver (or the comm peripheral).
+	 * Purpose: 	Initializes the driver.
 	 *
 	 * Arguments: 	<none>
 	 *
@@ -51,6 +48,8 @@ public:
 	 * Name:		read
 	 *
 	 * Purpose: 	Reads a byte from the communication interface for further processing
+	 * 				This method should be implemented so that the process that runs the
+	 * 				framework is suspended, so that other task can run.
 	 *
 	 * Arguments: 	<none>
 	 */

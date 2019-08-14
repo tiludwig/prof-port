@@ -32,7 +32,6 @@ private:
 public:
 
 	void initialize();
-	//void initialize(CommunicationDriver& comlink, TargetWrapper& profTarget);
 	void run();
 };
 

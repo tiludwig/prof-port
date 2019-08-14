@@ -62,6 +62,7 @@ void GenericTarget::initialize()
 	// Depending on the operating system and task this could also:
 	// - spawn a new thread for the target
 	// - start the target process
+	// - register the target within the operating system's profiler
 }
 
 /*

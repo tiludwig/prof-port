@@ -24,21 +24,31 @@ class ExecutionTimer
 public:
 	virtual ~ExecutionTimer() {}
 
-	virtual void initialize(const char*) = 0;
+	/*
+	 * Name:		initialize
+	 *
+	 * Purpose:		Initializes the execution timer.
+	 *
+	 * Arguments:	params Generic initialization parameters to the execution timer.
+	 * 					   This could be a pid/tid, a taskhandle, a taskname, etc.
+	 */
+	virtual void initialize(void* params) = 0;
 
 	/*
 	 * Name:	startMeasurement
 	 *
-	 * Purpose: Starts the exection time measurement. The actual measurement technique
-	 * 			is defined by the implementation.
+	 * Purpose: Starts the execution time measurement. This function is called by the
+	 * 			analyzer module prior to starting the process cycle of the target. The
+	 * 			actual measurement technique is defined by the implementation.
 	 */
 	virtual void startMeasurement() = 0;
 
 	/*
 	 * Name:	getElapsed
 	 *
-	 * Purpose: Gets the elapsed execution time. The time unit is defined by the imple-
-	 * 			mentation.
+	 * Purpose: Gets the elapsed execution time. This function is called by the
+	 * 			analyzer module after the process cycle of the target has ended.
+	 * 			The time unit is defined by the implementation.
 	 */
 	virtual uint32_t getElapsed() = 0;
 
