@@ -29,10 +29,6 @@
  */
 
 /* Includes */
-#include <FreeRTOS.h>
-#include <semphr.h>
-#include <task.h>
-
 #include <application.h>
 #include <Utility/ui-task/ui-task.h>
 #include <Utility/idle-task/idle-task.h>
@@ -42,6 +38,7 @@
 
 #include <TTTProfConfig.h>
 
+#if 0
 TaskHandle_t xProfilingTask = NULL;
 
 extern "C" void vApplicationStackOverflowHook( TaskHandle_t xTask,
@@ -49,9 +46,10 @@ extern "C" void vApplicationStackOverflowHook( TaskHandle_t xTask,
 {
 	asm volatile("nop");
 }
-
+#endif
 int main()
 {
+#if 0
 	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4);
 
 	xTaskCreate(uiTask, "ui", 128, NULL, 2, NULL);
@@ -61,7 +59,7 @@ int main()
 			&xProfilingTask);
 	xTaskCreate(idleTask, "idle", 128, NULL, 1, NULL);
 	xPortStartScheduler();
-
+#endif
 	while (1)
 	{
 
